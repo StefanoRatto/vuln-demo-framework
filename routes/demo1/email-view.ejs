@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1e1e2e;
+      color: #cdd6f4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .navbar {
+      background-color: #181825 !important;
+      border-bottom: 1px solid #313244;
+    }
+    .email-header {
+      background-color: #181825;
+      border: 1px solid #313244;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .email-content {
+      background-color: #181825;
+      border: 1px solid #313244;
+      border-radius: 8px;
+      padding: 2rem;
+      min-height: 400px;
+    }
+    .email-meta {
+      background-color: #313244;
+      border: 1px solid #45475a;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .vulnerability-badge {
+      background-color: #f38ba8;
+      color: #11111b;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .gmail-toolbar {
+      background-color: #313244;
+      border: 1px solid #45475a;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+    }
+    .btn-gmail {
+      background-color: #45475a;
+      border: 1px solid #45475a;
+      color: #cdd6f4;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.8rem;
+      margin-right: 0.5rem;
+    }
+    .btn-gmail:hover {
+      background-color: #585b70;
+      color: #cdd6f4;
+    }
+    .raw-html-view {
+      background-color: #11111b;
+      border: 1px solid #313244;
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .demo-warning {
+      background-color: #313244;
+      border: 1px solid #f38ba8;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .demo-warning h6 {
+      color: #f38ba8;
+    }
+    /* Gmail-like email content styling */
+    .email-body {
+      background-color: #f8f9fa;
+      color: #333;
+      padding: 0;
+      border-radius: 8px;
+      margin: 1rem 0;
+      border: 1px solid #ddd;
+      overflow: hidden;
+    }
+    .email-body h1 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+    .email-body p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    .email-body a {
+      color: inherit;
+      text-decoration: underline;
+    }
+    .email-body a:hover {
+      text-decoration: underline;
+    }
+    .email-body div[style] {
+      /* Preserve inline styles from injected HTML */
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/demo1/emails">
+        <i class="bi bi-arrow-left me-2"></i>Back to Inbox
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/demo1/docs">📋 Documentation</a>
+        <a class="nav-link" href="/demo1">🚗 AutoFinder</a>
+        <a class="nav-link" href="/">← Back to Demos</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-12">
+        
+        <!-- Demo Warning -->
+        <div class="demo-warning">
+          <h6><i class="bi bi-shield-exclamation me-2"></i>HTML Injection Demonstration</h6>
+          <p class="mb-0">This email contains <strong>unescaped user input</strong> that allows HTML injection. Notice how malicious content from the search name is rendered directly in the email template.</p>
+        </div>
+
+        <!-- Gmail-style Toolbar -->
+        <div class="gmail-toolbar d-flex justify-content-between align-items-center">
+          <div>
+            <button class="btn btn-gmail">
+              <i class="bi bi-arrow-left me-1"></i>Back
+            </button>
+            <button class="btn btn-gmail">
+              <i class="bi bi-archive me-1"></i>Archive
+            </button>
+            <button class="btn btn-gmail">
+              <i class="bi bi-exclamation-triangle me-1"></i>Report spam
+            </button>
+            <button class="btn btn-gmail">
+              <i class="bi bi-trash me-1"></i>Delete
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-gmail" onclick="toggleRawView()">
+              <i class="bi bi-code me-1"></i>View HTML Source
+            </button>
+            <button class="btn btn-gmail">
+              <i class="bi bi-printer me-1"></i>Print
+            </button>
+          </div>
+        </div>
+
+        <!-- Email Header -->
+        <div class="email-header">
+          <div class="row align-items-center mb-3">
+            <div class="col-md-8">
+              <h4 class="mb-1">
+                <%= email.subject %>
+                <span class="vulnerability-badge ms-2">HTML INJECTION VECTOR</span>
+              </h4>
+              <div class="text-muted">
+                <strong>From:</strong> <%= email.fromName %> &lt;<%= email.from %>&gt;
+              </div>
+              <div class="text-muted">
+                <strong>To:</strong> <%= email.toName %> &lt;<%= email.to %>&gt;
+              </div>
+            </div>
+            <div class="col-md-4 text-end">
+              <div class="text-muted">
+                <%= new Date(email.timestamp).toLocaleDateString() %> at <%= new Date(email.timestamp).toLocaleTimeString() %>
+              </div>
+              <% if (email.triggerCar) { %>
+                <div class="text-info">
+                  <i class="bi bi-car-front me-1"></i>Triggered by: <%= email.triggerCar %>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email Metadata -->
+        <div class="email-meta">
+          <h6 class="text-warning mb-3">
+            <i class="bi bi-bug me-2"></i>Vulnerability Analysis
+          </h6>
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Search Name:</strong> <code><%= email.searchName || 'null' %></code></p>
+              <p><strong>Search ID:</strong> <%= email.searchId %></p>
+              <p><strong>Email ID:</strong> <%= email.id %></p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Injection Point:</strong> Search name field</p>
+              <p><strong>Vulnerability:</strong> Unescaped HTML in email template</p>
+              <p><strong>Risk Level:</strong> <span class="vulnerability-badge">HIGH</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email Content (rendered as Gmail would show it) -->
+        <div class="email-content">
+          <h5 class="text-primary mb-3">
+            <i class="bi bi-envelope-open me-2"></i>Email Content (As Victim Sees It)
+          </h5>
+          
+          <!-- This div renders the email exactly as a victim would see it -->
+          <div class="email-body">
+            <%- email.htmlContent %>
+          </div>
+        </div>
+
+        <!-- Raw HTML View (initially hidden) -->
+        <div id="rawHtmlView" style="display: none;">
+          <div class="card mt-4">
+            <div class="card-header">
+              <h6 class="mb-0">
+                <i class="bi bi-code-slash me-2"></i>Raw HTML Source Code
+              </h6>
+            </div>
+            <div class="card-body">
+              <p class="text-warning mb-3">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <strong>This is the actual HTML that gets sent to victims.</strong> 
+                Notice how the search name is inserted directly without any encoding or sanitization.
+              </p>
+              <div class="raw-html-view">
+                <pre><code><%= email.htmlContent.replace(/</g, '&lt;').replace(/>/g, '&gt;') %></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attack Impact Analysis -->
+        <div class="card mt-4">
+          <div class="card-header bg-danger">
+            <h6 class="mb-0 text-white">
+              <i class="bi bi-shield-x me-2"></i>Attack Impact Analysis
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="text-danger">What an Attacker Can Do:</h6>
+                <ul>
+                  <li>Inject malicious links that look official</li>
+                  <li>Redirect users to phishing sites</li>
+                  <li>Embed tracking pixels to monitor email opens</li>
+                  <li>Create convincing credential harvesting attacks</li>
+                  <li>Deface company emails with unauthorized content</li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <h6 class="text-warning">Why This Works:</h6>
+                <ul>
+                  <li>User input goes directly into email HTML</li>
+                  <li>No HTML encoding or sanitization</li>
+                  <li>Official AutoFinder branding makes it trustworthy</li>
+                  <li>Sent to real customer email addresses</li>
+                  <li>Can target any user via IDOR attacks</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function toggleRawView() {
+      const rawView = document.getElementById('rawHtmlView');
+      const btn = event.target.closest('button');
+      
+      if (rawView.style.display === 'none') {
+        rawView.style.display = 'block';
+        btn.innerHTML = '<i class="bi bi-eye-slash me-1"></i>Hide HTML Source';
+        rawView.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        rawView.style.display = 'none';
+        btn.innerHTML = '<i class="bi bi-code me-1"></i>View HTML Source';
+      }
+    }
+    
+    // Add click handlers for Gmail-style buttons
+    document.querySelectorAll('.btn-gmail').forEach(btn => {
+      if (!btn.onclick) {
+        btn.addEventListener('click', function() {
+          if (this.textContent.includes('Back')) {
+            window.location.href = '/demo1/emails';
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

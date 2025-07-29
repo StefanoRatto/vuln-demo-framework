@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1e1e2e;
+      color: #cdd6f4;
+    }
+    .navbar {
+      background-color: #181825 !important;
+      border-bottom: 1px solid #313244;
+    }
+    .card {
+      background-color: #181825;
+      border: 1px solid #313244;
+    }
+    .card-header {
+      background-color: #11111b;
+      border-bottom: 1px solid #313244;
+    }
+    .main-box {
+      background-color: #181825;
+      border: 1px solid #313244;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 0;
+      height: 100%;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #313244;
+    }
+    .divider:not(:empty)::before {
+      margin-right: .5em;
+    }
+    .divider:not(:empty)::after {
+      margin-left: .5em;
+    }
+    .form-control, .form-select {
+      background-color: #1e1e2e;
+      border: 1px solid #313244;
+      color: #cdd6f4;
+    }
+    .form-control:focus, .form-select:focus {
+      background-color: #1e1e2e;
+      border-color: #89b4fa;
+      color: #cdd6f4;
+      box-shadow: 0 0 0 0.25rem rgba(137, 180, 250, 0.25);
+    }
+    .btn-signin {
+      background-color: #89b4fa;
+      color: #11111b;
+      width: 100%;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+      font-weight: 500;
+      font-size: 1.1rem;
+      border: none;
+    }
+    .btn-signin:hover {
+      background-color: #b4befe;
+      color: #11111b;
+    }
+    .btn-view-order {
+      width: 100%;
+      background-color: #89b4fa;
+      color: #11111b;
+      border: none;
+      border-radius: 4px;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+    .btn-view-order:hover {
+      background-color: #b4befe;
+      color: #11111b;
+    }
+    .btn-view-order:disabled {
+      background-color: #585b70;
+      color: #a6adc8;
+      cursor: not-allowed;
+    }
+    .forgot-link {
+      font-size: 0.95rem;
+      color: #89b4fa;
+      text-decoration: none;
+    }
+    .forgot-link:hover {
+      text-decoration: underline;
+      color: #b4befe;
+    }
+    .recaptcha-box {
+      border: 1px solid #313244;
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      background-color: #313244;
+    }
+    .form-check-input:disabled {
+      background-color: #313244;
+      border-color: #45475a;
+    }
+    .recaptcha-box img {
+      height: 32px;
+      float: right;
+    }
+    .alert-success {
+      background-color: #a6e3a1;
+      border-color: #a6e3a1;
+      color: #11111b;
+    }
+    .alert-danger {
+      background-color: #f38ba8;
+      border-color: #f38ba8;
+      color: #11111b;
+    }
+    .alert-info {
+      background-color: #89b4fa;
+      border-color: #89b4fa;
+      color: #11111b;
+    }
+    .order-details {
+      background-color: #1e1e2e;
+      border: 1px solid #313244;
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+    .badge {
+      font-size: 0.75em;
+    }
+    .demo-hint {
+      background-color: #313244;
+      border: 1px solid #f38ba8;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .demo-hint h6 {
+      color: #f38ba8;
+    }
+    .demo-hint ul {
+      color: #bac2de;
+      font-size: 0.9em;
+    }
+    .order-number-hint {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      color: #89b4fa;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/demo2">
+        <i class="bi bi-box-seam me-2"></i>ShopTracker
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/demo2/docs">
+          <i class="bi bi-book me-1"></i>📋 Documentation
+        </a>
+        <a class="nav-link" href="/">← Back to Demos</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="row main-box g-0 align-items-start p-4">
+          <!-- Sign In Form -->
+          <div class="col-md-5 pe-md-4">
+            <h5 class="mb-4"><i class="bi bi-person-circle me-2"></i>Sign In</h5>
+            <form id="signInForm">
+              <div class="mb-3">
+                <input type="email" class="form-control" placeholder="email" disabled>
+              </div>
+              <div class="mb-3">
+                <input type="password" class="form-control" placeholder="password" disabled>
+              </div>
+              <button type="button" class="btn btn-signin" disabled>sign in</button>
+              <div class="text-center mt-2">
+                <a href="#" class="forgot-link">forgot password?</a>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Divider -->
+          <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+            <div class="divider" style="width:100%;">
+              <span style="background:#161b22;padding:0 10px;color:#8b949e;font-weight:500;">or</span>
+            </div>
+          </div>
+          
+          <!-- Order Lookup -->
+          <div class="col-md-5">
+            <h5 class="mb-4"><i class="bi bi-search me-2"></i>Track Your Order</h5>
+            <form id="orderLookupForm">
+              <div class="mb-3">
+                <input type="text" class="form-control" id="orderNumber" placeholder="enter order number" required>
+                <div class="form-text order-number-hint">Try: R500160602, R500160603, R500160604, or R500160600-R500160999</div>
+              </div>
+              <div class="mb-3">
+                <input type="text" class="form-control" id="zipCode" placeholder="billing zipcode" required>
+                <div class="form-text">Full zip or partial (e.g., 44333 or 443 or 4 or 0)</div>
+              </div>
+              
+              <div class="recaptcha-box mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="recaptchaCheck">
+                  <label class="form-check-label" for="recaptchaCheck">
+                    I'm not a robot
+                  </label>
+                  <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA">
+                </div>
+                <div style="font-size:10px;color:#8b949e;margin-top:2px;">
+                  reCAPTCHA<br>Privacy - Terms
+                </div>
+              </div>
+              
+              <button type="submit" class="btn btn-view-order" id="viewOrderBtn">
+                <i class="bi bi-eye me-2"></i>view order
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Order Results -->
+        <div id="orderResults" style="display: none;" class="mt-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Order Details</h5>
+            </div>
+            <div class="card-body">
+              <div id="orderDetailsContent"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" style="display: none;" class="mt-4">
+          <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span id="errorText"></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('orderLookupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const orderNumber = document.getElementById('orderNumber').value.trim();
+      const zipCode = document.getElementById('zipCode').value.trim();
+      const captchaChecked = document.getElementById('recaptchaCheck').checked;
+      
+      if (!orderNumber || !zipCode) {
+        showError('Please enter both order number and zip code.');
+        return;
+      }
+      
+      // Show loading state
+      const btn = document.getElementById('viewOrderBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="bi bi-arrow-clockwise spin me-2"></i>Looking up...';
+      btn.disabled = true;
+      
+      try {
+        const graphqlQuery = {
+          operationName: null,
+          variables: {},
+          query: `{
+            order(number: "${orderNumber}", zipcode: "${zipCode}", guestToken: "") {
+              number
+              email
+              zipcode
+              firstName
+              lastName
+              fullName
+              phone
+              address1
+              address2
+              city
+              state
+              lastFour
+              items {
+                name
+                price
+                quantity
+              }
+              total
+              status
+              orderDate
+              trackingNumber
+            }
+          }`
+        };
+        
+        console.log('Sending GraphQL query:', graphqlQuery);
+        
+        const response = await fetch('/api/platform/sales', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(graphqlQuery)
+        });
+        
+        const result = await response.json();
+        console.log('GraphQL response:', result);
+        
+        if (result.data && result.data.order) {
+          displayOrderDetails(result.data.order);
+          hideError();
+        } else {
+          showError('Order not found. Please check your order number and zip code.');
+        }
+        
+      } catch (error) {
+        console.error('Lookup failed:', error);
+        showError('An error occurred while looking up your order. Please try again.');
+      } finally {
+        // Reset button
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    });
+    
+    function displayOrderDetails(order) {
+      const content = document.getElementById('orderDetailsContent');
+      
+      const statusBadge = order.status === 'Delivered' ? 'bg-success' : 
+                         order.status === 'Shipped' ? 'bg-primary' : 'bg-warning';
+      
+      content.innerHTML = `
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="text-primary mb-3">Order Information</h6>
+            <p><strong>Order Number:</strong> ${order.number}</p>
+            <p><strong>Status:</strong> <span class="badge ${statusBadge}">${order.status}</span></p>
+            <p><strong>Order Date:</strong> ${order.orderDate}</p>
+            <p><strong>Tracking Number:</strong> ${order.trackingNumber || 'N/A'}</p>
+            <p><strong>Total:</strong> $${(order.total / 100).toFixed(2)}</p>
+          </div>
+          <div class="col-md-6">
+            <h6 class="text-primary mb-3">Customer Information</h6>
+            <p><strong>Name:</strong> ${order.fullName}</p>
+            <p><strong>Email:</strong> ${order.email}</p>
+            <p><strong>Phone:</strong> ${order.phone}</p>
+            <p><strong>Address:</strong><br>
+              ${order.address1}<br>
+              ${order.address2 ? order.address2 + '<br>' : ''}
+              ${order.city}, ${order.state} ${order.zipcode}
+            </p>
+            <p><strong>Payment:</strong> Card ending in ${order.lastFour}</p>
+          </div>
+        </div>
+        
+        <hr class="my-4">
+        
+        <h6 class="text-primary mb-3">Items Ordered</h6>
+        <div class="table-responsive">
+          <table class="table table-dark table-striped">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${order.items.map(item => `
+                <tr>
+                  <td>${item.name}</td>
+                  <td>${item.quantity}</td>
+                  <td>$${(item.price / 100).toFixed(2)}</td>
+                  <td>$${((item.price * item.quantity) / 100).toFixed(2)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        
+      `;
+      
+      document.getElementById('orderResults').style.display = 'block';
+      document.getElementById('orderResults').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function showError(message) {
+      document.getElementById('errorText').textContent = message;
+      document.getElementById('errorMessage').style.display = 'block';
+      document.getElementById('orderResults').style.display = 'none';
+    }
+    
+    function hideError() {
+      document.getElementById('errorMessage').style.display = 'none';
+    }
+    
+    // Enable captcha checkbox
+    document.getElementById('recaptchaCheck').addEventListener('change', function() {
+      // In a real implementation, this would validate the captcha
+      // For demo purposes, we just enable the button
+      console.log('Captcha checked:', this.checked);
+    });
+    
+    // Add spinning animation for loading
+    const style = document.createElement('style');
+    style.textContent = `
+      .spin {
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>

